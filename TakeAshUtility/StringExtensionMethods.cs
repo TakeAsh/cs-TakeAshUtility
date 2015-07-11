@@ -85,8 +85,11 @@ namespace TakeAshUtility {
             StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries
         ) {
             separator = separator ?? new[] { "," };
-            return text.Split(separator, options)
-                .Select(item => item.Trim());
+            return text == null ?
+                null :
+                text.Trim()
+                    .Split(separator, options)
+                    .Select(item => item.Trim());
         }
     }
 }
