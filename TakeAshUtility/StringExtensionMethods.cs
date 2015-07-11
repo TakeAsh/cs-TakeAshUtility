@@ -85,7 +85,7 @@ namespace TakeAshUtility {
             StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries
         ) {
             separator = separator ?? new[] { "," };
-            return text == null ?
+            return String.IsNullOrEmpty(text) ?
                 null :
                 text.Trim()
                     .Split(separator, options)

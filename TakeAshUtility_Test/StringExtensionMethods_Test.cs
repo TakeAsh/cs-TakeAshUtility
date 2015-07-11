@@ -126,6 +126,7 @@ namespace TakeAshUtility_Test {
         }
 
         [TestCase(null, null, StringSplitOptions.RemoveEmptyEntries, null)]
+        [TestCase("", null, StringSplitOptions.RemoveEmptyEntries, null)]
         [TestCase("a, b, c, d", null, StringSplitOptions.RemoveEmptyEntries, new[] { "a", "b", "c", "d" })]
         [TestCase("a, b, c, d,", null, StringSplitOptions.RemoveEmptyEntries, new[] { "a", "b", "c", "d" })]
         [TestCase("a, b, c, d, ", null, StringSplitOptions.RemoveEmptyEntries, new[] { "a", "b", "c", "d" })]
@@ -147,7 +148,10 @@ namespace TakeAshUtility_Test {
             if (expected == null) {
                 Assert.IsNull(actualList);
             } else {
-                CollectionAssert.AreEqual(expected, actualList);
+                CollectionAssert.AreEqual(
+                    expected, actualList,
+                    "expected:'" + String.Join(", ", expected) + "', Actual:'" + String.Join(", ", expected) + "'"
+                );
             }
         }
     }
