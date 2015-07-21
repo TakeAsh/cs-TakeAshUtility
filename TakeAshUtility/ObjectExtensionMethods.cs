@@ -122,5 +122,31 @@ namespace TakeAshUtility {
             }
             return (string)mi.Invoke(obj, new object[] { opt1, opt2, opt3, });
         }
+
+        public static TAttr[] GetAttributes<TAttr>(this Object obj, string propertyName)
+            where TAttr : Attribute {
+
+            if (obj == null || String.IsNullOrEmpty(propertyName)) {
+                return null;
+            }
+            var memInfos = obj.GetType().GetMember(propertyName);
+            if (memInfos == null || memInfos.Length == 0) {
+                return null;
+            }
+            var attrs = memInfos.First().GetCustomAttributes(typeof(TAttr), false) as TAttr[];
+            if (attrs == null || attrs.Length == 0) {
+                return null;
+            }
+            return attrs;
+        }
+
+        public static TAttr GetAttribute<TAttr>(this Object obj, string propertyName)
+            where TAttr : Attribute {
+
+            var attrs = obj.GetAttributes<TAttr>(propertyName);
+            return attrs == null || attrs.Length == 0 ?
+                null :
+                attrs.FirstOrDefault();
+        }
     }
 }
