@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -31,6 +32,27 @@ namespace TakeAshUtility {
             return attrs == null || attrs.Length == 0 ?
                 null :
                 attrs.FirstOrDefault();
+        }
+
+        public static string ToDescription(this Type type, string propertyName) {
+            if (type == null || String.IsNullOrEmpty(propertyName)) {
+                return null;
+            }
+            string ret = null;
+            var resManager = ResourceHelper.GetResourceManager(type);
+            if (resManager != null &&
+               !String.IsNullOrEmpty(ret = resManager.GetString(type.Name + "_" + propertyName))) {
+                return ret;
+            }
+            var descriptionAttribute = type.GetAttribute<DescriptionAttribute>(propertyName);
+            if (descriptionAttribute != null &&
+                !String.IsNullOrEmpty(descriptionAttribute.Description)) {
+                return descriptionAttribute.Description;
+            }
+            var pi = type.GetProperty(propertyName);
+            return pi != null ?
+                pi.Name :
+                null;
         }
     }
 }
