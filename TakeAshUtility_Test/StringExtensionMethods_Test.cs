@@ -112,6 +112,29 @@ namespace TakeAshUtility_Test {
             Assert.AreEqual(expected, input.TryParse(Separators.Comma));
         }
 
+        [TestCase("http://example.com", false, "http", "example.com", "/", 80)]
+        [TestCase("http://example.net:8080", false, "http", "example.net", "/", 8080)]
+        [TestCase("http://example.net/path/to/folder", false, "http", "example.net", "/path/to/folder", 80)]
+        [TestCase("https://example.org", false, "https", "example.org", "/", 443)]
+        [TestCase("ftp://example.jp", false, "ftp", "example.jp", "/", 21)]
+        [TestCase("telnet://example.com", false, "telnet", "example.com", "/", 23)]
+        [TestCase("NotExist://example.com:1234", false, "notexist", "example.com", "/", 1234)]
+        //[TestCase("invalid uri", true, null, null, null, 0)]
+        //[TestCase("", true, null, null, null, 0)]
+        [TestCase(null, true, null, null, null, 0)]
+        public void TryParse_Uri_Test(string input, bool isNull, string scheme, string host, string path, int port) {
+            var actual = input.TryParse<Uri>();
+            if (!isNull) {
+                Assert.IsNotNull(actual);
+                Assert.AreEqual(scheme, actual.Scheme, "Scheme");
+                Assert.AreEqual(host, actual.Host, "Host");
+                Assert.AreEqual(path, actual.AbsolutePath, "AbsolutePath");
+                Assert.AreEqual(port, actual.Port, "Port");
+            } else {
+                Assert.IsNull(actual);
+            }
+        }
+
         [TestCase("abc", "", "abc")]
         [TestCase("", "", "")]
         [TestCase(null, "", "")]

@@ -21,8 +21,7 @@ namespace TakeAshUtility {
         /// <typeparam name="T">target type</typeparam>
         /// <param name="text">text to convert</param>
         /// <returns>T type object</returns>
-        public static T TryParse<T>(this string text)
-            where T : struct {
+        public static T TryParse<T>(this string text) {
 
             return text.TryParse(default(T));
         }
@@ -34,8 +33,7 @@ namespace TakeAshUtility {
         /// <param name="text">text to convert</param>
         /// <param name="defaultValue">return value if fail</param>
         /// <returns>T type object</returns>
-        public static T TryParse<T>(this string text, T defaultValue)
-            where T : struct {
+        public static T TryParse<T>(this string text, T defaultValue) {
 
             // コンバーターを作成
             var converter = TypeDescriptor.GetConverter(typeof(T));
