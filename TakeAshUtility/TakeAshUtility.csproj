@@ -76,6 +76,7 @@
     <Compile Include="SafeWalk.cs" />
     <Compile Include="StringExtensionMethods.cs" />
     <Compile Include="StringifyHelper.cs" />
+    <Compile Include="TcpListenerEx.cs" />
     <Compile Include="TypeExtensionMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
