@@ -19,6 +19,9 @@ namespace TakeAshUtility {
         /// </remarks>
         public static TcpState GetState(this TcpClient tcpClient) {
             var socket = tcpClient.Client;
+            if (!socket.Connected) {
+                return TcpState.Unknown;
+            }
             var connection = IPGlobalProperties.GetIPGlobalProperties()
                 .GetActiveTcpConnections()
                 .FirstOrDefault(info =>
