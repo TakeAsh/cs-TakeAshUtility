@@ -29,24 +29,25 @@ namespace TakeAshUtility {
         PropertyChangedWithValueEventArgs<TValue> e
     );
 
-    public interface IPropertyChangedWithValue<TValue> {
-        event PropertyChangedWithValueEventHandler<TValue> PropertyChangedWithValue;
+    public interface INotifyPropertyChangedWithValue {
+        //event PropertyChangedWithValueEventHandler<TValue> PropertyChangedWithValue;
     }
 
-    public static class IPropertyChangedWithValueExtensionMethods {
+    public static class INotifyPropertyChangedWithValueExtensionMethods {
 
-        const string EventHandlerName = "PropertyChangedWithValue";
+        public const string DefaultEventHandlerName = "PropertyChangedWithValue";
 
         public static void NotifyPropertyChanged<TValue>(
-            this IPropertyChangedWithValue<TValue> sender,
+            this INotifyPropertyChangedWithValue sender,
             string propertyName,
             TValue newValue = default(TValue),
-            TValue oldValue = default(TValue)
+            TValue oldValue = default(TValue),
+            string eventHandlerName = DefaultEventHandlerName
         ) {
             if (sender == null || String.IsNullOrEmpty(propertyName)) {
                 return;
             }
-            var handler = sender.GetDelegate(EventHandlerName)
+            var handler = sender.GetDelegate(eventHandlerName)
                 .GetHandler<PropertyChangedWithValueEventHandler<TValue>>();
             if (handler == null) {
                 return;
@@ -58,10 +59,11 @@ namespace TakeAshUtility {
         }
 
         public static void SetPropertyAndNotifyIfChanged<TValue>(
-            this IPropertyChangedWithValue<TValue> sender,
+            this INotifyPropertyChangedWithValue sender,
             string propertyName,
             ref TValue field,
-            TValue newValue
+            TValue newValue,
+            string eventHandlerName = DefaultEventHandlerName
         ) {
             if (sender == null ||
                 String.IsNullOrEmpty(propertyName) ||
@@ -70,7 +72,7 @@ namespace TakeAshUtility {
             }
             var oldValue = field;
             field = newValue;
-            sender.NotifyPropertyChanged(propertyName, newValue, oldValue);
+            sender.NotifyPropertyChanged(propertyName, newValue, oldValue, eventHandlerName);
         }
     }
 }
