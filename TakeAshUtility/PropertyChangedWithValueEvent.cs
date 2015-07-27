@@ -5,13 +5,13 @@ using System.Text;
 
 namespace TakeAshUtility {
 
-    public class PropertyChangedWithValueEventArgs<TValue> :
+    public class PropertyChangedWithValueEventArgs :
         EventArgs {
 
         public PropertyChangedWithValueEventArgs(
             string propertyName,
-            TValue newValue = default(TValue),
-            TValue oldValue = default(TValue)
+            Object newValue = default(Object),
+            Object oldValue = default(Object)
         )
             : base() {
             this.PropertyName = propertyName;
@@ -20,41 +20,40 @@ namespace TakeAshUtility {
         }
 
         public string PropertyName { get; private set; }
-        public TValue NewValue { get; private set; }
-        public TValue OldValue { get; private set; }
+        public Object NewValue { get; private set; }
+        public Object OldValue { get; private set; }
     }
 
-    public delegate void PropertyChangedWithValueEventHandler<TValue>(
+    public delegate void PropertyChangedWithValueEventHandler(
         object sender,
-        PropertyChangedWithValueEventArgs<TValue> e
+        PropertyChangedWithValueEventArgs e
     );
 
     public interface INotifyPropertyChangedWithValue {
-        //event PropertyChangedWithValueEventHandler<TValue> PropertyChangedWithValue;
+        event PropertyChangedWithValueEventHandler PropertyChangedWithValue;
     }
 
     public static class INotifyPropertyChangedWithValueExtensionMethods {
 
-        public const string DefaultEventHandlerName = "PropertyChangedWithValue";
+        const string EventHandlerName = "PropertyChangedWithValue";
 
         public static void NotifyPropertyChanged<TValue>(
             this INotifyPropertyChangedWithValue sender,
             string propertyName,
             TValue newValue = default(TValue),
-            TValue oldValue = default(TValue),
-            string eventHandlerName = DefaultEventHandlerName
+            TValue oldValue = default(TValue)
         ) {
             if (sender == null || String.IsNullOrEmpty(propertyName)) {
                 return;
             }
-            var handler = sender.GetDelegate(eventHandlerName)
-                .GetHandler<PropertyChangedWithValueEventHandler<TValue>>();
+            var handler = sender.GetDelegate(EventHandlerName)
+                .GetHandler<PropertyChangedWithValueEventHandler>();
             if (handler == null) {
                 return;
             }
             handler(
                 sender,
-                new PropertyChangedWithValueEventArgs<TValue>(propertyName, newValue, oldValue)
+                new PropertyChangedWithValueEventArgs(propertyName, newValue, oldValue)
             );
         }
 
@@ -62,8 +61,7 @@ namespace TakeAshUtility {
             this INotifyPropertyChangedWithValue sender,
             string propertyName,
             ref TValue field,
-            TValue newValue,
-            string eventHandlerName = DefaultEventHandlerName
+            TValue newValue
         ) {
             if (sender == null ||
                 String.IsNullOrEmpty(propertyName) ||
@@ -72,7 +70,7 @@ namespace TakeAshUtility {
             }
             var oldValue = field;
             field = newValue;
-            sender.NotifyPropertyChanged(propertyName, newValue, oldValue, eventHandlerName);
+            sender.NotifyPropertyChanged(propertyName, newValue, oldValue);
         }
     }
 }
