@@ -22,6 +22,10 @@ namespace TakeAshUtility {
         public string PropertyName { get; private set; }
         public Object NewValue { get; private set; }
         public Object OldValue { get; private set; }
+
+        public override string ToString() {
+            return PropertyName + ", New:{" + NewValue + "}, Old:{" + OldValue + "}";
+        }
     }
 
     public delegate void PropertyChangedWithValueEventHandler(
