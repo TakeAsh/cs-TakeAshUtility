@@ -38,13 +38,13 @@ namespace TakeAshUtility {
         }
 
         public static Delegate GetDelegate(this Object obj, string eventHandlerName) {
-            return obj == null || String.IsNullOrEmpty(eventHandlerName) ?
-                null :
-                obj.GetType()
-                    .GetField(
-                        eventHandlerName,
-                        BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField
-                    ).GetValue(obj) as Delegate;
+            var flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField;
+            FieldInfo field;
+            return obj == null ||
+                String.IsNullOrEmpty(eventHandlerName) ||
+                (field = obj.GetType().GetField(eventHandlerName, flags)) == null ?
+                    null :
+                    field.GetValue(obj) as Delegate;
         }
 
         public static T GetHandler<T>(this Delegate delgate)
