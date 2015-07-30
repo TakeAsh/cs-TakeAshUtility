@@ -25,8 +25,8 @@ namespace TakeAshUtility {
             var connection = IPGlobalProperties.GetIPGlobalProperties()
                 .GetActiveTcpConnections()
                 .FirstOrDefault(info =>
-                    info.RemoteEndPoint.Equals(socket.RemoteEndPoint) &&
-                    info.LocalEndPoint.Equals(socket.LocalEndPoint));
+                    info.RemoteEndPoint.EqualsIgnoreScopeId(socket.RemoteEndPoint) &&
+                    info.LocalEndPoint.EqualsIgnoreScopeId(socket.LocalEndPoint));
             return connection != null ?
                 connection.State :
                 TcpState.Unknown;
