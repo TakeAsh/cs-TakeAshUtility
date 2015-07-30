@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crypt.cs" />
+    <Compile Include="EndPointExtensionMethods.cs" />
     <Compile Include="ExceptionExtensionMethods.cs" />
     <Compile Include="FileFilter.cs" />
     <Compile Include="InlineComparer.cs" />
