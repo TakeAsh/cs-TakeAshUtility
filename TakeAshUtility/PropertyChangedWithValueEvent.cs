@@ -29,7 +29,7 @@ namespace TakeAshUtility {
     }
 
     public delegate void PropertyChangedWithValueEventHandler(
-        object sender,
+        INotifyPropertyChangedWithValue sender,
         PropertyChangedWithValueEventArgs e
     );
 
