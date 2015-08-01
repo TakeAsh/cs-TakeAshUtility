@@ -124,6 +124,8 @@ namespace TakeAshUtility_Test {
 
         public bool Equals(Sample1 other) { return this.Equals<Sample1, Items>(other); }
 
+        public override int GetHashCode() { return this.GetHashCode<Sample1, Items>(); }
+
         #endregion
 
         public string ToXml() {
@@ -212,6 +214,36 @@ namespace TakeAshUtility_Test {
                 obj1.Equals<Sample1, Sample1.Items>(obj2),
                 "obj1:{" + obj1 + "}, obj2:{" + obj2 + "}"
             );
+        }
+
+        [TestCase("ID\t0", "ID\t0", true)]
+        [TestCase("ID\t0", "ID\t1", false)]
+        [TestCase("ID\t1", "ID\t1", true)]
+        [TestCase("Name\tabc", "Name\tabc", true)]
+        [TestCase("Name\tabc", "Name\tdef", false)]
+        [TestCase("Name\tdef", "Name\tdef", true)]
+        [TestCase("Comment\tabc", "Comment\tabc", true)]
+        [TestCase("Comment\tabc", "Comment\tdef", false)]
+        [TestCase("Comment\tdef", "Comment\tdef", true)]
+        [TestCase("Name\tabc", "Comment\tabc", false)]
+        [TestCase("Name\tabc", "Comment\tdef", false)]
+        [TestCase("Name\tdef", "Comment\tdef", false)]
+        public void GetHashCode_Test(string input1, string input2, bool expectedEqual) {
+            var obj1 = new Sample1().FromString(input1);
+            var obj2 = new Sample1().FromString(input2);
+            if (expectedEqual) {
+                Assert.AreEqual(
+                    obj1.GetHashCode(),
+                    obj2.GetHashCode(),
+                    "obj1:{" + obj1 + "}, obj2:{" + obj2 + "}"
+                );
+            } else {
+                Assert.AreNotEqual(
+                    obj1.GetHashCode(),
+                    obj2.GetHashCode(),
+                    "obj1:{" + obj1 + "}, obj2:{" + obj2 + "}"
+                );
+            }
         }
     }
 }

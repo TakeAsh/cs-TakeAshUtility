@@ -75,6 +75,19 @@ namespace TakeAshUtility {
                 .Aggregate(true, (current, item) => current && (obj[item] == objB[item]));
         }
 
+        public static int GetHashCode<TIItems, TEnum>(this TIItems obj)
+            where TIItems : IItems<TEnum>, new()
+            where TEnum : struct, IConvertible {
+
+            if (obj == null) {
+                return 0;
+            }
+            var index = 0;
+            return GetValues<TEnum>()
+                .Where(item => obj[item] != null)
+                .Aggregate(0, (current, item) => current ^ obj[item].GetHashCode() * (++index));
+        }
+
         private static TEnum[] GetValues<TEnum>()
             where TEnum : struct, IConvertible {
 
