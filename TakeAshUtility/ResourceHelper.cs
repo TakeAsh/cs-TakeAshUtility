@@ -19,6 +19,23 @@ namespace TakeAshUtility {
             return new BitmapImage(new Uri("/" + assembly + ";component/" + filename, UriKind.Relative));
         }
 
+        public static BitmapImage GetEmbeddedImage(string filename) {
+            if (String.IsNullOrEmpty(filename)) {
+                return null;
+            }
+            using (var stream = GetResourceStream(Assembly.GetCallingAssembly(), filename)) {
+                if (stream == null) {
+                    return null;
+                }
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = stream;
+                image.EndInit();
+                return image;
+            }
+        }
+
         /// <summary>
         /// Get text of embedded resource file
         /// </summary>
@@ -31,14 +48,17 @@ namespace TakeAshUtility {
                 return null;
             }
             encoding = encoding ?? Encoding.UTF8;
-            var assembly = Assembly.GetCallingAssembly();
-            var directory = Path.GetDirectoryName(filename).Replace('-', '_');
-            var file = Path.GetFileName(filename);
-            var resourceName = Path.Combine(assembly.GetName().Name, directory, file).Replace('\\', '.').Replace('/', '.');
-            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            using (var stream = GetResourceStream(Assembly.GetCallingAssembly(), filename))
             using (var reader = new StreamReader(stream, encoding)) {
                 return reader.ReadToEnd();
             }
+        }
+
+        private static Stream GetResourceStream(Assembly assembly, string filename) {
+            var directory = Path.GetDirectoryName(filename).Replace('-', '_');
+            var file = Path.GetFileName(filename);
+            var resourceName = Path.Combine(assembly.GetName().Name, directory, file).Replace('\\', '.').Replace('/', '.');
+            return assembly.GetManifestResourceStream(resourceName);
         }
 
         public static ResourceManager GetResourceManager(Assembly assembly) {
