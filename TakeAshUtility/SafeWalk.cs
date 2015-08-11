@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,9 @@ namespace TakeAshUtility {
     public static class SafeWalk {
 
         public static IEnumerable<string> EnumerateFiles(string path, string searchPattern, SearchOption searchOpt) {
+            if (String.IsNullOrEmpty(path)) {
+                return Enumerable.Empty<string>();
+            }
             try {
                 var dirFiles = Enumerable.Empty<string>();
                 if (searchOpt == SearchOption.AllDirectories) {
@@ -23,11 +27,10 @@ namespace TakeAshUtility {
                 }
                 return dirFiles.Concat(Directory.EnumerateFiles(path, searchPattern));
             }
-#pragma warning disable 0168
-            catch (UnauthorizedAccessException ex) {
+            catch (Exception ex) {
+                Debug.Print(ex.GetAllMessages());
                 return Enumerable.Empty<string>();
             }
-#pragma warning restore 0168
         }
     }
 }
