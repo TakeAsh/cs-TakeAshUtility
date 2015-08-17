@@ -53,6 +53,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -83,6 +84,7 @@
     <Compile Include="IItems.cs" />
     <Compile Include="TcpClientExtensionMethods.cs" />
     <Compile Include="TcpListenerEx.cs" />
+    <Compile Include="TraceSourceExtensionMethods.cs" />
     <Compile Include="TypeExtensionMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
