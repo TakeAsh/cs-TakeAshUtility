@@ -11,11 +11,11 @@ namespace TakeAshUtility {
 
     public static class ResourceHelper {
 
-        public static BitmapImage GetImage(string filename) {
+        public static BitmapImage GetImage(string filename, string assembly = null) {
             if (filename == null) {
                 return null;
             }
-            var assembly = Assembly.GetCallingAssembly().GetName().Name;
+            assembly = assembly ?? Assembly.GetCallingAssembly().GetName().Name;
             return new BitmapImage(new Uri("/" + assembly + ";component/" + filename, UriKind.Relative));
         }
 
