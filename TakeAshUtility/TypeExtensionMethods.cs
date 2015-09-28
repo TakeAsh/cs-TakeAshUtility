@@ -54,5 +54,32 @@ namespace TakeAshUtility {
                 pi.Name :
                 null;
         }
+
+        /// <summary>
+        /// Check if a class is derived from a generic class
+        /// </summary>
+        /// <param name="toCheck">a type of class to check</param>
+        /// <param name="generic">a type of generic class</param>
+        /// <returns>
+        /// <list type="table">
+        /// <item><term>true</term><description>toCheck is derived from generic</description></item>
+        /// <item><term>false</term><description>toCheck is not derived from generic</description></item>
+        /// </list>
+        /// </returns>
+        /// <remarks>
+        /// [c# - Check if a class is derived from a generic class - Stack Overflow](http://stackoverflow.com/questions/457676/)
+        /// </remarks>
+        public static bool IsSubclassOfRawGeneric(this Type toCheck, Type generic) {
+            while (toCheck != null && toCheck != typeof(object)) {
+                var cur = toCheck.IsGenericType ?
+                    toCheck.GetGenericTypeDefinition() :
+                    toCheck;
+                if (generic == cur) {
+                    return true;
+                }
+                toCheck = toCheck.BaseType;
+            }
+            return false;
+        }
     }
 }
