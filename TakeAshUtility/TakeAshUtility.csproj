@@ -73,6 +73,7 @@
     <Compile Include="EventHandlerExtensionMethods.cs" />
     <Compile Include="ExceptionExtensionMethods.cs" />
     <Compile Include="FileFilter.cs" />
+    <Compile Include="IComparableExtensionMethods.cs" />
     <Compile Include="InlineComparer.cs" />
     <Compile Include="INotifyPropertyChangedExtensionMethods.cs" />
     <Compile Include="ObjectExtensionMethods.cs" />
