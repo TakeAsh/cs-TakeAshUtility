@@ -39,6 +39,23 @@ namespace TakeAshUtility_Test {
             Assert.AreEqual(expected, input.TryParse(DefaultIntValue));
         }
 
+        [TestCase("0", 0)]
+        [TestCase("1", 1)]
+        [TestCase("2", 2)]
+        [TestCase("-1", -1)]
+        [TestCase("-2", -2)]
+        [TestCase("a", null)]
+        [TestCase("", null)]
+        [TestCase(null, null)]
+        public void TryParse_IntNullable_Test(string input, int? expected) {
+            var actual = input.TryParse<int?>();
+            if (expected != null) {
+                Assert.AreEqual(expected, actual);
+            } else {
+                Assert.IsNull(actual);
+            }
+        }
+
         [TestCase("0.0", 0)]
         [TestCase("1.0", 1)]
         [TestCase("2.0", 2)]
@@ -61,6 +78,23 @@ namespace TakeAshUtility_Test {
         [TestCase(null, DefaultDoubleValue)]
         public void TryParse_Double_WithDefalut_Test(string input, double expected) {
             Assert.AreEqual(expected, input.TryParse(DefaultDoubleValue));
+        }
+
+        [TestCase("0.0", 0.0)]
+        [TestCase("1.0", 1.0)]
+        [TestCase("2.0", 2.0)]
+        [TestCase("-1.0", -1.0)]
+        [TestCase("-2.0", -2.0)]
+        [TestCase("a", null)]
+        [TestCase("", null)]
+        [TestCase(null, null)]
+        public void TryParse_DoubleNullable_Test(string input, double? expected) {
+            var actual = input.TryParse<double?>();
+            if (expected != null) {
+                Assert.AreEqual(expected, actual);
+            } else {
+                Assert.IsNull(actual);
+            }
         }
 
         [TestCase("2015/06/11 01:02:03", "2015-06-11 01:02:03")]
@@ -110,6 +144,22 @@ namespace TakeAshUtility_Test {
         [TestCase(null, Separators.Comma)]
         public void TryParse_Enum_WithDefalut_Test(string input, Separators expected) {
             Assert.AreEqual(expected, input.TryParse(Separators.Comma));
+        }
+
+        [TestCase("Tab", Separators.Tab)]
+        [TestCase("Space", Separators.Space)]
+        [TestCase("Comma", Separators.Comma)]
+        [TestCase("Semicolon", Separators.Semicolon)]
+        [TestCase("a", null)]
+        [TestCase("", null)]
+        [TestCase(null, null)]
+        public void TryParse_EnumNullable_Test(string input, Separators? expected) {
+            var actual = input.TryParse<Separators?>();
+            if (expected != null) {
+                Assert.AreEqual(expected, actual);
+            } else {
+                Assert.IsNull(actual);
+            }
         }
 
         [TestCase("http://example.com", false, "http", "example.com", "/", 80)]
