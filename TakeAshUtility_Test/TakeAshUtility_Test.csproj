@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="EndPointExtensionMethods_Test.cs" />
     <Compile Include="IComparableExtensionMethods_Test.cs" />
+    <Compile Include="IEnumerableExtensionMethods_Test.cs" />
     <Compile Include="IItems_Test.cs" />
     <Compile Include="ObjectExtensionMethods_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
