@@ -108,5 +108,35 @@ namespace TakeAshUtility_Test {
                 Assert.IsNull(actual);
             }
         }
+
+        [TestCase("0", 1, 0)]
+        [TestCase("1", 0, 1)]
+        [TestCase("2", 0, 2)]
+        [TestCase("-1", 0, -1)]
+        [TestCase(null, 0, 0)]
+        [TestCase(null, 1, 1)]
+        [TestCase(null, -1, -1)]
+        [TestCase("", 0, 0)]
+        [TestCase("", 1, 1)]
+        [TestCase("", -1, -1)]
+        [TestCase("a", 0, 0)]
+        [TestCase("a", 1, 1)]
+        [TestCase("a", -1, -1)]
+        public void SafeToObject_int_Test(string input, int defaultValue, int expected) {
+            var actual = input.SafeToObject(defaultValue);
+            Assert.AreEqual(expected, actual);
+        }
+
+        static readonly DateTime DefaultDateTimeValue = new DateTime(2010, 11, 12, 13, 14, 15);
+
+        [TestCase("2015/06/11 01:02:03", "2015-06-11 01:02:03")]
+        [TestCase("a", "2010-11-12 13:14:15")]
+        [TestCase("", "0001-01-01 00:00:00")]
+        [TestCase(null, "2010-11-12 13:14:15")]
+        public void SafeToObject_DateTime_Test(string input, string expected) {
+            DateTime expectedDate;
+            DateTime.TryParse(expected, out expectedDate);
+            Assert.AreEqual(expectedDate, input.SafeToObject(DefaultDateTimeValue));
+        }
     }
 }

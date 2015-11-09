@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -121,6 +122,19 @@ namespace TakeAshUtility {
                 );
             }
             return (string)mi.Invoke(obj, new object[] { opt1, opt2, opt3, });
+        }
+
+        public static T SafeToObject<T>(this object source, T defaultValue = default(T)) {
+            var converter = TypeDescriptor.GetConverter(typeof(T));
+            if (source == null || converter == null || !converter.CanConvertFrom(source.GetType())) {
+                return defaultValue;
+            }
+            try {
+                return (T)converter.ConvertFrom(source);
+            }
+            catch {
+                return defaultValue;
+            }
         }
     }
 }
