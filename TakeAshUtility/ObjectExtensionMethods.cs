@@ -125,12 +125,23 @@ namespace TakeAshUtility {
         }
 
         public static T SafeToObject<T>(this object source, T defaultValue = default(T)) {
-            var converter = TypeDescriptor.GetConverter(typeof(T));
-            if (source == null || converter == null || !converter.CanConvertFrom(source.GetType())) {
+            if (source == null) {
                 return defaultValue;
             }
+            var sourceType = source.GetType();
             try {
-                return (T)converter.ConvertFrom(source);
+                var targetConverter = TypeDescriptor.GetConverter(typeof(T));
+                if (targetConverter != null && targetConverter.CanConvertFrom(sourceType)) {
+                    return (T)targetConverter.ConvertFrom(source);
+                }
+                var sourceConverter = TypeDescriptor.GetConverter(sourceType);
+                if (sourceConverter != null && sourceConverter.CanConvertTo(typeof(T))) {
+                    return (T)sourceConverter.ConvertTo(source, typeof(T));
+                }
+                if (typeof(T).IsAssignableFrom(sourceType)) {
+                    return (T)source;
+                }
+                return defaultValue;
             }
             catch {
                 return defaultValue;

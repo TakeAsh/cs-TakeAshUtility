@@ -109,6 +109,12 @@ namespace TakeAshUtility_Test {
             }
         }
 
+        private string GetTypeName(object obj) {
+            return obj == null ?
+                "null" :
+                obj.GetType().Name;
+        }
+
         [TestCase("0", 1, 0)]
         [TestCase("1", 0, 1)]
         [TestCase("2", 0, 2)]
@@ -122,9 +128,43 @@ namespace TakeAshUtility_Test {
         [TestCase("a", 0, 0)]
         [TestCase("a", 1, 1)]
         [TestCase("a", -1, -1)]
-        public void SafeToObject_int_Test(string input, int defaultValue, int expected) {
+        [TestCase(0, 1, 0)]
+        [TestCase(1, 0, 1)]
+        [TestCase(2, 0, 2)]
+        [TestCase(-1, 0, -1)]
+        [TestCase(0.0, 1, 0)]
+        [TestCase(1.0, 0, 1)]
+        [TestCase(2.0, 0, 2)]
+        [TestCase(-1.0, 0, -1)]
+        public void SafeToObject_int_Test(object input, int defaultValue, int expected) {
             var actual = input.SafeToObject(defaultValue);
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, actual, "SourceType:" + GetTypeName(input));
+        }
+
+        [TestCase("0", 1, 0)]
+        [TestCase("1.2", 0, 1.2)]
+        [TestCase("2.4", 0, 2.4)]
+        [TestCase("-1.6", 0, -1.6)]
+        [TestCase(null, 0, 0)]
+        [TestCase(null, 1, 1)]
+        [TestCase(null, -1, -1)]
+        [TestCase("", 0, 0)]
+        [TestCase("", 1, 1)]
+        [TestCase("", -1, -1)]
+        [TestCase("a", 0, 0)]
+        [TestCase("a", 1, 1)]
+        [TestCase("a", -1, -1)]
+        [TestCase(0, 1, 0)]
+        [TestCase(1, 0, 1)]
+        [TestCase(2, 0, 2)]
+        [TestCase(-1, 0, -1)]
+        [TestCase(0.0, 1, 0)]
+        [TestCase(1.0, 0, 1)]
+        [TestCase(2.0, 0, 2)]
+        [TestCase(-1.0, 0, -1)]
+        public void SafeToObject_double_Test(object input, double defaultValue, double expected) {
+            var actual = input.SafeToObject(defaultValue);
+            Assert.AreEqual(expected, actual, "SourceType:" + GetTypeName(input));
         }
 
         static readonly DateTime DefaultDateTimeValue = new DateTime(2010, 11, 12, 13, 14, 15);
