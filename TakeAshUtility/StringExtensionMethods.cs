@@ -89,5 +89,24 @@ namespace TakeAshUtility {
                     .Split(separator, options)
                     .Select(item => item.Trim());
         }
+
+        /// <summary>
+        /// Returns a string containing a specified number of characters from the right side of a string.
+        /// </summary>
+        /// <param name="text">expression from which the rightmost characters are returned.</param>
+        /// <param name="length">Numeric expression indicating how many characters to return.</param>
+        /// <returns>a string containing a specified number of characters from the right side of a string.</returns>
+        /// <remarks>
+        /// [c# - Extract only right most n letters from a string - Stack Overflow](http://stackoverflow.com/questions/1722334/)
+        /// </remarks>
+        public static string Right(this string text, int length) {
+            if (text == null || length < 0) {
+                return null;
+            }
+            if (text.Length <= length) {
+                return text;
+            }
+            return text.Substring(text.Length - length);
+        }
     }
 }

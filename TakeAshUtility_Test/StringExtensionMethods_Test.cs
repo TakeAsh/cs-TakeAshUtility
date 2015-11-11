@@ -227,5 +227,64 @@ namespace TakeAshUtility_Test {
                 );
             }
         }
+
+        [TestCase(null, 0, null)]
+        [TestCase(null, 1, null)]
+        [TestCase(null, 2, null)]
+        [TestCase(null, 3, null)]
+        [TestCase(null, -1, null)]
+        [TestCase("", 0, "")]
+        [TestCase("", 1, "")]
+        [TestCase("", 2, "")]
+        [TestCase("", 3, "")]
+        [TestCase("", -1, null)]
+        [TestCase("a", 0, "")]
+        [TestCase("a", 1, "a")]
+        [TestCase("a", 2, "a")]
+        [TestCase("a", 3, "a")]
+        [TestCase("a", -1, null)]
+        [TestCase("ab", 0, "")]
+        [TestCase("ab", 1, "b")]
+        [TestCase("ab", 2, "ab")]
+        [TestCase("ab", 3, "ab")]
+        [TestCase("ab", -1, null)]
+        [TestCase("abc", 0, "")]
+        [TestCase("abc", 1, "c")]
+        [TestCase("abc", 2, "bc")]
+        [TestCase("abc", 3, "abc")]
+        [TestCase("abc", -1, null)]
+        [TestCase("abcd", 0, "")]
+        [TestCase("abcd", 1, "d")]
+        [TestCase("abcd", 2, "cd")]
+        [TestCase("abcd", 3, "bcd")]
+        [TestCase("abcd", -1, null)]
+        [TestCase("あ", 0, "")]
+        [TestCase("あ", 1, "あ")]
+        [TestCase("あ", 2, "あ")]
+        [TestCase("あ", 3, "あ")]
+        [TestCase("あ", -1, null)]
+        [TestCase("あい", 0, "")]
+        [TestCase("あい", 1, "い")]
+        [TestCase("あい", 2, "あい")]
+        [TestCase("あい", 3, "あい")]
+        [TestCase("あい", -1, null)]
+        [TestCase("あいう", 0, "")]
+        [TestCase("あいう", 1, "う")]
+        [TestCase("あいう", 2, "いう")]
+        [TestCase("あいう", 3, "あいう")]
+        [TestCase("あいう", -1, null)]
+        [TestCase("あいうえ", 0, "")]
+        [TestCase("あいうえ", 1, "え")]
+        [TestCase("あいうえ", 2, "うえ")]
+        [TestCase("あいうえ", 3, "いうえ")]
+        [TestCase("あいうえ", -1, null)]
+        public void Right_Test(string input, int length, string expected) {
+            var actual = input.Right(length);
+            if (expected != null) {
+                Assert.AreEqual(expected, actual);
+            } else {
+                Assert.IsNull(actual);
+            }
+        }
     }
 }
