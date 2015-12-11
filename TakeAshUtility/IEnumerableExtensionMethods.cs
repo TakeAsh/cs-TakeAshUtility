@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace TakeAshUtility {
@@ -133,6 +134,20 @@ namespace TakeAshUtility {
                 }
                 return candidate;
             }
+        }
+
+        /// <summary>
+        /// Make testcases for NUnit
+        /// </summary>
+        /// <typeparam name="T">Type of source unit</typeparam>
+        /// <param name="source">Testcases source</param>
+        /// <returns>Testcases for NUnit</returns>
+        public static IEnumerable<object[]> ToTestCases<T>(this IEnumerable<T> source) {
+            var readableProperties = typeof(T)
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .Where(prop => prop.CanRead == true && prop.GetGetMethod() != null)
+                .ToArray();
+            return source.Select(item => readableProperties.Select(prop => prop.GetValue(item, null)).ToArray());
         }
     }
 }
