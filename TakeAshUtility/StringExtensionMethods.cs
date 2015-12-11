@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace TakeAshUtility {
 
@@ -107,6 +108,38 @@ namespace TakeAshUtility {
                 return text;
             }
             return text.Substring(text.Length - length);
+        }
+
+        private static readonly Regex _regQuotemeta = new Regex(@"([^0-9A-Za-z_])");
+
+        /// <summary>
+        /// escape non-word characters as unicode expression.
+        /// </summary>
+        /// <param name="source">raw string</param>
+        /// <returns>escaped string</returns>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>[Regex.Escape Method](http://msdn.microsoft.com/en-us/library/system.text.regularexpressions.regex.escape.aspx)</item>
+        /// <item>[quotemeta for javascript](http://blog.livedoor.jp/dankogai/archives/51058313.html)</item>
+        /// </list>
+        /// </remarks>
+        public static string Quotemeta(this string source) {
+            if (String.IsNullOrEmpty(source)) {
+                return source;
+            }
+            return _regQuotemeta.Replace(
+                source,
+                (Match m) => "\\u" + String.Format("{0:x4}", (int)(m.Value[0]))
+            );
+        }
+
+        /// <summary>
+        /// escape non-word characters as unicode expression.
+        /// </summary>
+        /// <param name="source">raw strings</param>
+        /// <returns>escaped strings</returns>
+        public static IEnumerable<string> Quotemeta(this IEnumerable<string> source) {
+            return source.Select(text => Quotemeta(text));
         }
     }
 }

@@ -286,5 +286,50 @@ namespace TakeAshUtility_Test {
                 Assert.IsNull(actual);
             }
         }
+
+        public struct QuotemetaTestCase {
+
+            public QuotemetaTestCase(string input, string expected)
+                : this() {
+                Input = input;
+                Expected = expected;
+            }
+
+            public string Input { get; set; }
+            public string Expected { get; set; }
+        };
+
+        public static readonly QuotemetaTestCase[] _quotemetaTestCasesRaw = new[] {
+            new QuotemetaTestCase(null, null),
+            new QuotemetaTestCase("", ""),
+            new QuotemetaTestCase("0123456789", "0123456789"),
+            new QuotemetaTestCase("ABCabcXYZxyz", "ABCabcXYZxyz"),
+            new QuotemetaTestCase("_", "_"),
+            new QuotemetaTestCase(" ", "\\u0020"),
+            new QuotemetaTestCase("\t", "\\u0009"),
+            new QuotemetaTestCase("\n", "\\u000a"),
+            new QuotemetaTestCase("\r", "\\u000d"),
+            new QuotemetaTestCase("\r\n", "\\u000d\\u000a"),
+            new QuotemetaTestCase("012\t345\n678\r9", "012\\u0009345\\u000a678\\u000d9"),
+            new QuotemetaTestCase("あいう", "\\u3042\\u3044\\u3046"),
+            new QuotemetaTestCase("高髙崎﨑", "\\u9ad8\\u9ad9\\u5d0e\\ufa11"),
+            new QuotemetaTestCase("剥\u525D填\u5861頬\u9830", "\\u5265\\u525d\\u586b\\u5861\\u982c\\u9830"),
+            new QuotemetaTestCase("\uD842\uDF9F", "\\ud842\\udf9f"), // U+20B9F 𠮟
+            new QuotemetaTestCase("\uD842\uDFB7", "\\ud842\\udfb7"), // U+20BB7 𠮷
+        };
+
+        public IEnumerable<object[]> _quotemetaTestCases = _quotemetaTestCasesRaw.ToTestCases();
+        public IEnumerable<string> inputs = _quotemetaTestCasesRaw.Select(testcase => testcase.Input);
+        public IEnumerable<string> expecteds = _quotemetaTestCasesRaw.Select(testcase => testcase.Expected);
+
+        [TestCaseSource("_quotemetaTestCases")]
+        public void Quotemeta_string_Test(string input, string expected) {
+            Assert.AreEqual(expected, input.Quotemeta());
+        }
+
+        [TestCase]
+        public void Quotemeta_stringArray_Test() {
+            CollectionAssert.AreEqual(expecteds, inputs.Quotemeta());
+        }
     }
 }
