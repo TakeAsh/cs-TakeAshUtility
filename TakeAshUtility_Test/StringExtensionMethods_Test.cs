@@ -318,7 +318,7 @@ namespace TakeAshUtility_Test {
             new QuotemetaTestCase("\uD842\uDFB7", "\\ud842\\udfb7"), // U+20BB7 𠮷
         };
 
-        public IEnumerable<object[]> _quotemetaTestCases = _quotemetaTestCasesRaw.ToTestCases();
+        public static IEnumerable<object[]> _quotemetaTestCases = _quotemetaTestCasesRaw.ToTestCases();
         public IEnumerable<string> inputs = _quotemetaTestCasesRaw.Select(testcase => testcase.Input);
         public IEnumerable<string> expecteds = _quotemetaTestCasesRaw.Select(testcase => testcase.Expected);
 
