@@ -73,5 +73,57 @@ namespace TakeAshUtility_Test {
                     break;
             }
         }
+
+        [TestCase("Double", "1;2;3;4;5", "2;4;6;8;10")]
+        [TestCase("Triple", "1;2;3;4;5", "3;6;9;12;15")]
+        [TestCase("Single", "1;2;3;4;5", "1;2;3;4;5")]
+        public void ForEach_Test(string func, string input, string expected) {
+            Func<double, double> converter;
+            switch (func) {
+                case "Double":
+                    converter = (x) => x * 2;
+                    break;
+                case "Triple":
+                    converter = (x) => x * 3;
+                    break;
+                default:
+                    converter = (x) => x;
+                    break;
+            }
+            var work = new List<double>();
+            input.Split(new[] { ";" }, StringSplitOptions.None)
+                .Select(x => x.TryParse<double>())
+                .ForEach(x => work.Add(converter(x)));
+            var expectedSequence = expected.Split(new[] { ";" }, StringSplitOptions.None)
+                .Select(x => x.TryParse<double>())
+                .ToArray();
+            CollectionAssert.AreEqual(expectedSequence, work);
+        }
+
+        [TestCase("Double", "1;2;3;4;5", "2;5;8;11;14")]
+        [TestCase("Triple", "1;2;3;4;5", "3;7;11;15;19")]
+        [TestCase("Single", "1;2;3;4;5", "1;3;5;7;9")]
+        public void ForEach_with_Index_Test(string func, string input, string expected) {
+            Func<double, int, double> converter;
+            switch (func) {
+                case "Double":
+                    converter = (x, index) => x * 2 + index;
+                    break;
+                case "Triple":
+                    converter = (x, index) => x * 3 + index;
+                    break;
+                default:
+                    converter = (x, index) => x + index;
+                    break;
+            }
+            var work = new List<double>();
+            input.Split(new[] { ";" }, StringSplitOptions.None)
+                .Select(x => x.TryParse<double>())
+                .ForEach((x, index) => work.Add(converter(x, index)));
+            var expectedSequence = expected.Split(new[] { ";" }, StringSplitOptions.None)
+                .Select(x => x.TryParse<double>())
+                .ToArray();
+            CollectionAssert.AreEqual(expectedSequence, work);
+        }
     }
 }

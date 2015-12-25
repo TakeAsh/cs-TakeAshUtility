@@ -149,5 +149,48 @@ namespace TakeAshUtility {
                 .ToArray();
             return source.Select(item => readableProperties.Select(prop => prop.GetValue(item, null)).ToArray());
         }
+
+        /// <summary>
+        /// ForEach for IEnumerable&lt;T&gt;
+        /// </summary>
+        /// <typeparam name="T">Source type</typeparam>
+        /// <param name="enumeration">Source</param>
+        /// <param name="action">Action to be applied for each source items</param>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>[LINQ equivalent of foreach for IEnumerable&lt;T&gt; - Stack Overflow](http://stackoverflow.com/questions/200574/)</item>
+        /// <item>["foreach" vs "ForEach" | Fabulous Adventures In Coding](https://blogs.msdn.microsoft.com/ericlippert/2009/05/18/foreach-vs-foreach/)</item>
+        /// </list>
+        /// </remarks>
+        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action) {
+            if (enumeration == null || action == null) {
+                return;
+            }
+            foreach (T item in enumeration) {
+                action(item);
+            }
+        }
+
+        /// <summary>
+        /// ForEach for IEnumerable&lt;T&gt; with index
+        /// </summary>
+        /// <typeparam name="T">Source type</typeparam>
+        /// <param name="enumeration">Source</param>
+        /// <param name="action">Action to be applied for each source items</param>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>[c# - List&lt;T&gt;.ForEach with index - Stack Overflow](http://stackoverflow.com/questions/13054281/)</item>
+        /// </list>
+        /// </remarks>
+        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T, int> action) {
+            if (enumeration == null || action == null) {
+                return;
+            }
+            var index = 0;
+            foreach (T item in enumeration) {
+                action(item, index);
+                ++index;
+            }
+        }
     }
 }
