@@ -28,30 +28,6 @@ namespace TakeAshUtility_Test {
         }
     }
 
-    class IdComparer :
-        IComparer<Person> {
-
-        public int Compare(Person x, Person y) {
-            return x.ID.CompareTo(y.ID);
-        }
-    }
-
-    class NameComparer :
-        IComparer<Person> {
-
-        public int Compare(Person x, Person y) {
-            return x.Name.CompareTo(y.Name);
-        }
-    }
-
-    class DateOfBirthComparer :
-        IComparer<Person> {
-
-        public int Compare(Person x, Person y) {
-            return x.DateOfBirth.CompareTo(y.DateOfBirth);
-        }
-    }
-
     [TestFixture]
     class IEnumerableExtensionMethods_Test {
 
@@ -63,6 +39,10 @@ namespace TakeAshUtility_Test {
             new Person(10004, "Bob", new DateTime(2020, 5, 1)),
             new Person(10005, "Clarisse", new DateTime(2005, 6, 1)),
         };
+
+        IComparer<Person> _idComparer = new InlineComparer<Person>((x, y) => x.ID.CompareTo(y.ID));
+        IComparer<Person> _nameComparer = new InlineComparer<Person>((x, y) => x.Name.CompareTo(y.Name));
+        IComparer<Person> _dateOfBirthComparer = new InlineComparer<Person>((x, y) => x.DateOfBirth.CompareTo(y.DateOfBirth));
 
         [TestCase("ID", 0)]
         [TestCase("Name", 3)]
@@ -87,13 +67,13 @@ namespace TakeAshUtility_Test {
         public void IndexOfMin_Test(string key, int expected) {
             switch (key) {
                 case "ID":
-                    Assert.AreEqual(expected, _persons.IndexOfMin(new IdComparer()));
+                    Assert.AreEqual(expected, _persons.IndexOfMin(_idComparer));
                     break;
                 case "Name":
-                    Assert.AreEqual(expected, _persons.IndexOfMin(new NameComparer()));
+                    Assert.AreEqual(expected, _persons.IndexOfMin(_nameComparer));
                     break;
                 case "DateOfBirth":
-                    Assert.AreEqual(expected, _persons.IndexOfMin(new DateOfBirthComparer()));
+                    Assert.AreEqual(expected, _persons.IndexOfMin(_dateOfBirthComparer));
                     break;
             }
         }
@@ -121,13 +101,13 @@ namespace TakeAshUtility_Test {
         public void IndexOfMax_Test(string key, int expected) {
             switch (key) {
                 case "ID":
-                    Assert.AreEqual(expected, _persons.IndexOfMax(new IdComparer()));
+                    Assert.AreEqual(expected, _persons.IndexOfMax(_idComparer));
                     break;
                 case "Name":
-                    Assert.AreEqual(expected, _persons.IndexOfMax(new NameComparer()));
+                    Assert.AreEqual(expected, _persons.IndexOfMax(_nameComparer));
                     break;
                 case "DateOfBirth":
-                    Assert.AreEqual(expected, _persons.IndexOfMax(new DateOfBirthComparer()));
+                    Assert.AreEqual(expected, _persons.IndexOfMax(_dateOfBirthComparer));
                     break;
             }
         }
