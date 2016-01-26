@@ -31,4 +31,18 @@ namespace TakeAshUtility {
             return _getHashCode(obj);
         }
     }
+
+    public class InlineComparer<T> :
+        IComparer<T> {
+
+        private readonly Func<T, T, int> _compare;
+
+        public InlineComparer(Func<T, T, int> compare) {
+            _compare = compare;
+        }
+
+        public int Compare(T x, T y) {
+            return _compare(x, y);
+        }
+    }
 }
