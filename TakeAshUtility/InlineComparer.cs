@@ -12,13 +12,13 @@ namespace TakeAshUtility {
     /// <remarks>
     /// [c# - Using IEqualityComparer for Union - Stack Overflow](http://stackoverflow.com/questions/5969505)
     /// </remarks>
-    public class InlineComparer<T> :
+    public class InlineEqualityComparer<T> :
         IEqualityComparer<T> {
 
         private readonly Func<T, T, bool> _equals;
         private readonly Func<T, int> _getHashCode;
 
-        public InlineComparer(Func<T, T, bool> equals, Func<T, int> getHashCode) {
+        public InlineEqualityComparer(Func<T, T, bool> equals, Func<T, int> getHashCode) {
             _equals = equals;
             _getHashCode = getHashCode;
         }
