@@ -73,6 +73,49 @@ namespace TakeAshUtility {
         }
 
         /// <summary>
+        /// Returns first index of the value that is the minimum.
+        /// </summary>
+        /// <typeparam name="TSource">Type of the source sequence</typeparam>
+        /// <param name="source">Source sequence</param>
+        /// <returns>First index of the value that is the minimum</returns>
+        public static int IndexOfMin<TSource>(
+            this IEnumerable<TSource> source
+        ) {
+            return source.IndexOfMin(Comparer<TSource>.Default);
+        }
+
+        /// <summary>
+        /// Returns first index of the value that is the minimum.
+        /// </summary>
+        /// <typeparam name="TSource">Type of the source sequence</typeparam>
+        /// <param name="source">Source sequence</param>
+        /// <param name="comparer">Comparer to use to compare values</param>
+        /// <returns>First index of the value that is the minimum</returns>
+        public static int IndexOfMin<TSource>(
+            this IEnumerable<TSource> source,
+            IComparer<TSource> comparer
+        ) {
+            if (source == null || source.Count() == 0 || comparer == null) {
+                return -1;
+            }
+            using (var iterator = source.GetEnumerator()) {
+                var candidate = 0;
+                iterator.MoveNext();
+                var index = 0;
+                var candidateValue = iterator.Current;
+                while (iterator.MoveNext()) {
+                    ++index;
+                    var nextValue = iterator.Current;
+                    if (comparer.Compare(candidateValue, nextValue) > 0) {
+                        candidate = index;
+                        candidateValue = nextValue;
+                    }
+                }
+                return candidate;
+            }
+        }
+
+        /// <summary>
         /// Returns the maximal element of the given sequence,
         /// based on the given projection.
         /// </summary>
@@ -130,6 +173,49 @@ namespace TakeAshUtility {
                     if (comparer.Compare(candidateKey, nextKey) < 0) {
                         candidate = next;
                         candidateKey = nextKey;
+                    }
+                }
+                return candidate;
+            }
+        }
+
+        /// <summary>
+        /// Returns first index of the value that is the maximum.
+        /// </summary>
+        /// <typeparam name="TSource">Type of the source sequence</typeparam>
+        /// <param name="source">Source sequence</param>
+        /// <returns>First index of the value that is the maximum</returns>
+        public static int IndexOfMax<TSource>(
+            this IEnumerable<TSource> source
+        ) {
+            return source.IndexOfMax(Comparer<TSource>.Default);
+        }
+
+        /// <summary>
+        /// Returns first index of the value that is the maximum.
+        /// </summary>
+        /// <typeparam name="TSource">Type of the source sequence</typeparam>
+        /// <param name="source">Source sequence</param>
+        /// <param name="comparer">Comparer to use to compare values</param>
+        /// <returns>First index of the value that is the maximum</returns>
+        public static int IndexOfMax<TSource>(
+            this IEnumerable<TSource> source,
+            IComparer<TSource> comparer
+        ) {
+            if (source == null || source.Count() == 0 || comparer == null) {
+                return -1;
+            }
+            using (var iterator = source.GetEnumerator()) {
+                var candidate = 0;
+                iterator.MoveNext();
+                var index = 0;
+                var candidateValue = iterator.Current;
+                while (iterator.MoveNext()) {
+                    ++index;
+                    var nextValue = iterator.Current;
+                    if (comparer.Compare(candidateValue, nextValue) < 0) {
+                        candidate = index;
+                        candidateValue = nextValue;
                     }
                 }
                 return candidate;
