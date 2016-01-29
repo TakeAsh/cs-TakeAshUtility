@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationSettingsBaseExtensionMethods.cs" />
+    <Compile Include="Base64Converter.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="EndPointExtensionMethods.cs" />
     <Compile Include="EventHandlerExtensionMethods.cs" />
