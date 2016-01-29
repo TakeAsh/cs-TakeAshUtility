@@ -9,13 +9,25 @@ namespace TakeAshUtility {
     public class PrintMemberAttribute :
         Attribute {
 
+        private string _format;
+
         public PrintMemberAttribute() { }
 
-        public PrintMemberAttribute(string format) {
-            Format = "{0:" + format + "}";
+        public PrintMemberAttribute(string name) {
+            Name = name;
         }
 
-        public string Format { get; set; }
+        public PrintMemberAttribute(string name, string format) {
+            Name = name;
+            Format = format;
+        }
+
+        public string Name { get; set; }
+
+        public string Format {
+            get { return _format; }
+            set { _format = "{0:" + value + "}"; }
+        }
     }
 
     public static class ToStringHelper {
@@ -35,29 +47,31 @@ namespace TakeAshUtility {
             var objType = obj.GetType();
             var properties = objType.GetProperties(_flags)
                 .Select(property => {
-                    var attr = objType.GetAttribute<PrintMemberAttribute>(property.Name);
-                    if (attr == null) {
+                    var printMember = objType.GetAttribute<PrintMemberAttribute>(property.Name);
+                    if (printMember == null) {
                         return null;
                     }
-                    var valueString = String.IsNullOrEmpty(attr.Format) ?
+                    var valueString = String.IsNullOrEmpty(printMember.Format) ?
                         property.GetValue(obj, null) :
-                        String.Format(attr.Format, property.GetValue(obj, null));
-                    return property.Name + ":" + (property.PropertyType.IsPrimitive ?
-                        valueString :
-                        "{" + valueString + "}");
+                        String.Format(printMember.Format, property.GetValue(obj, null));
+                    return (printMember.Name ?? property.Name) + ":" +
+                        (property.PropertyType.IsPrimitive ?
+                            valueString :
+                            "{" + valueString + "}");
                 }).Where(item => item != null);
             var fields = objType.GetFields(_flags)
                 .Select(field => {
-                    var attr = objType.GetAttribute<PrintMemberAttribute>(field.Name);
-                    if (attr == null) {
+                    var printMember = objType.GetAttribute<PrintMemberAttribute>(field.Name);
+                    if (printMember == null) {
                         return null;
                     }
-                    var valueString = String.IsNullOrEmpty(attr.Format) ?
+                    var valueString = String.IsNullOrEmpty(printMember.Format) ?
                         field.GetValue(obj) :
-                        String.Format(attr.Format, field.GetValue(obj));
-                    return field.Name + ":" + (field.FieldType.IsPrimitive ?
-                        valueString :
-                        "{" + valueString + "}");
+                        String.Format(printMember.Format, field.GetValue(obj));
+                    return (printMember.Name ?? field.Name) + ":" +
+                        (field.FieldType.IsPrimitive ?
+                            valueString :
+                            "{" + valueString + "}");
                 }).Where(item => item != null);
             return String.Join(separator, properties.Concat(fields));
         }
