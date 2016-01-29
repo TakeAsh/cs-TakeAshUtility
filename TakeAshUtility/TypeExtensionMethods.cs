@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace TakeAshUtility {
 
     public static class TypeExtensionMethods {
+
+        private static readonly BindingFlags _flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
         public static TAttr[] GetAttributes<TAttr>(this Type type, string propertyName)
             where TAttr : Attribute {
@@ -14,7 +17,7 @@ namespace TakeAshUtility {
             if (type == null || String.IsNullOrEmpty(propertyName)) {
                 return null;
             }
-            var memInfos = type.GetMember(propertyName);
+            var memInfos = type.GetMember(propertyName, _flags);
             if (memInfos == null || memInfos.Length == 0) {
                 return null;
             }
