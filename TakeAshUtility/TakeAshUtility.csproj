@@ -91,6 +91,7 @@
     <Compile Include="IItems.cs" />
     <Compile Include="TcpClientExtensionMethods.cs" />
     <Compile Include="TcpListenerEx.cs" />
+    <Compile Include="ToStringHelper.cs" />
     <Compile Include="TraceSourceExtensionMethods.cs" />
     <Compile Include="TypeExtensionMethods.cs" />
   </ItemGroup>
