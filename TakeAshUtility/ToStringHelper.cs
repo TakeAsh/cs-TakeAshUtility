@@ -7,30 +7,30 @@ using System.Text;
 
 namespace TakeAshUtility {
 
-    public class PrintMemberAttribute :
+    public class ToStringMemberAttribute :
         Attribute {
 
         private string _format;
         private Type _typeConverterType;
         private TypeConverter _typeConverter;
 
-        public PrintMemberAttribute() { }
+        public ToStringMemberAttribute() { }
 
-        public PrintMemberAttribute(string name) {
+        public ToStringMemberAttribute(string name) {
             Name = name;
         }
 
-        public PrintMemberAttribute(string name, string format) {
+        public ToStringMemberAttribute(string name, string format) {
             Name = name;
             Format = format;
         }
 
-        public PrintMemberAttribute(string name, Type typeConverter) {
+        public ToStringMemberAttribute(string name, Type typeConverter) {
             Name = name;
             TypeConverter = typeConverter;
         }
 
-        public PrintMemberAttribute(Type typeConverter) {
+        public ToStringMemberAttribute(Type typeConverter) {
             TypeConverter = typeConverter;
         }
 
@@ -72,14 +72,14 @@ namespace TakeAshUtility {
         /// <param name="obj">Object to be converted to string</param>
         /// <param name="separator">Separator between properties and fields</param>
         /// <returns>properties and fields</returns>
-        public static string MembersToString(this object obj, string separator = ", ") {
+        public static string ToStringMembers(this object obj, string separator = ", ") {
             if (obj == null) {
                 return null;
             }
             var objType = obj.GetType();
             var properties = objType.GetProperties(_flags)
                 .Select(property => {
-                    var printMember = objType.GetAttribute<PrintMemberAttribute>(property.Name);
+                    var printMember = objType.GetAttribute<ToStringMemberAttribute>(property.Name);
                     return printMember == null ?
                         null :
                         printMember.ToString(
@@ -90,7 +90,7 @@ namespace TakeAshUtility {
                 }).Where(item => item != null);
             var fields = objType.GetFields(_flags)
                 .Select(field => {
-                    var printMember = objType.GetAttribute<PrintMemberAttribute>(field.Name);
+                    var printMember = objType.GetAttribute<ToStringMemberAttribute>(field.Name);
                     return printMember == null ?
                         null :
                         printMember.ToString(
