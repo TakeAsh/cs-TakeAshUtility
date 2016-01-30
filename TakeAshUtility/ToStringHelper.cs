@@ -67,7 +67,7 @@ namespace TakeAshUtility {
         private static readonly BindingFlags _flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
         /// <summary>
-        /// Returns properties and fields that have PrintMember attribute.
+        /// Returns properties and fields that have ToStringMember attribute.
         /// </summary>
         /// <param name="obj">Object to be converted to string</param>
         /// <param name="separator">Separator between properties and fields</param>
