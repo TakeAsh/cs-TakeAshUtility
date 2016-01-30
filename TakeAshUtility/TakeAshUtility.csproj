@@ -81,6 +81,7 @@
     <Compile Include="InlineComparer.cs" />
     <Compile Include="INotifyPropertyChangedExtensionMethods.cs" />
     <Compile Include="ListExtensionMethods.cs" />
+    <Compile Include="IEnumerableStringConverter.cs" />
     <Compile Include="ObjectExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyChangedWithValueEvent.cs" />
