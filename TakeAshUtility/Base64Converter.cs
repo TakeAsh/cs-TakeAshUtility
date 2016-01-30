@@ -25,9 +25,7 @@ namespace TakeAshUtility {
                 return null;
             }
             finally {
-                if (ptr != IntPtr.Zero) {
-                    Marshal.FreeHGlobal(ptr);
-                }
+                Marshal.FreeHGlobal(ptr);
             }
         }
 
@@ -49,9 +47,7 @@ namespace TakeAshUtility {
                 return default(T);
             }
             finally {
-                if (ptr != IntPtr.Zero) {
-                    Marshal.FreeHGlobal(ptr);
-                }
+                Marshal.FreeHGlobal(ptr);
             }
         }
     }
