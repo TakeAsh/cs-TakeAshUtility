@@ -79,10 +79,10 @@ namespace TakeAshUtility {
             var objType = obj.GetType();
             var properties = objType.GetProperties(_flags)
                 .Select(property => {
-                    var printMember = objType.GetAttribute<ToStringMemberAttribute>(property.Name);
-                    return printMember == null ?
+                    var toStringMember = objType.GetAttribute<ToStringMemberAttribute>(property.Name);
+                    return toStringMember == null ?
                         null :
-                        printMember.ToString(
+                        toStringMember.ToString(
                             property.Name,
                             property.PropertyType,
                             property.GetValue(obj, null)
@@ -90,10 +90,10 @@ namespace TakeAshUtility {
                 }).Where(item => item != null);
             var fields = objType.GetFields(_flags)
                 .Select(field => {
-                    var printMember = objType.GetAttribute<ToStringMemberAttribute>(field.Name);
-                    return printMember == null ?
+                    var toStringMember = objType.GetAttribute<ToStringMemberAttribute>(field.Name);
+                    return toStringMember == null ?
                         null :
-                        printMember.ToString(
+                        toStringMember.ToString(
                             field.Name,
                             field.FieldType,
                             field.GetValue(obj)
