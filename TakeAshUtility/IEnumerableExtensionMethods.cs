@@ -223,6 +223,45 @@ namespace TakeAshUtility {
         }
 
         /// <summary>
+        /// Finds the index of the first item matching an expression in an enumerable.
+        /// </summary>
+        /// <typeparam name="T">The type of the enumerable.</typeparam>
+        /// <param name="source">The enumerable to search.</param>
+        /// <param name="predicate">The expression to test the items against.</param>
+        /// <returns>The index of the first matching item, or -1 if no items match.</returns>
+        /// <remarks>
+        /// [c# - How to get index using LINQ? - Stack Overflow](http://stackoverflow.com/questions/2471588/)
+        /// </remarks>
+        public static int FindIndex<T>(this IEnumerable<T> source, Func<T, bool> predicate) {
+            if (source == null || predicate == null) {
+                return -1;
+            }
+
+            int index = 0;
+            foreach (var item in source) {
+                if (predicate(item)) {
+                    return index;
+                }
+                index++;
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// Finds the index of the first occurence of an item in an enumerable.
+        /// </summary>
+        /// <typeparam name="T">The type of the enumerable.</typeparam>
+        /// <param name="source">The enumerable to search.</param>
+        /// <param name="item">The item to find.</param>
+        /// <returns>The index of the first matching item, or -1 if the item was not found.</returns>
+        /// <remarks>
+        /// [c# - How to get index using LINQ? - Stack Overflow](http://stackoverflow.com/questions/2471588/)
+        /// </remarks>
+        public static int IndexOf<T>(this IEnumerable<T> source, T item) {
+            return source.FindIndex(current => EqualityComparer<T>.Default.Equals(item, current));
+        }
+
+        /// <summary>
         /// Make testcases for NUnit
         /// </summary>
         /// <typeparam name="T">Type of source unit</typeparam>
