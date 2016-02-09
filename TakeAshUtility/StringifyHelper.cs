@@ -42,7 +42,9 @@ namespace TakeAshUtility {
             Type destinationType
         ) {
             if (destinationType == typeof(string)) {
-                return ((T)value).ToString();
+                return value == null ?
+                    null :
+                    ((T)value).ToString();
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }
@@ -63,7 +65,7 @@ namespace TakeAshUtility {
             object value
         ) {
             if (value is string) {
-                return (new T()).FromString((string)value);
+                return (new T()).FromString(value as string);
             }
             return base.ConvertFrom(context, culture, value);
         }
