@@ -317,5 +317,19 @@ namespace TakeAshUtility {
                 ++index;
             }
         }
+
+        public static T[] SafeToArray<T>(this IEnumerable<T> source) {
+            if (source == null || source.Count() == 0) {
+                return null;
+            }
+            return source.ToArray();
+        }
+
+        public static List<T> SafeToList<T>(this IEnumerable<T> source) {
+            if (source == null || source.Count() == 0) {
+                return null;
+            }
+            return source.ToList();
+        }
     }
 }
