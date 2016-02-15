@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TakeAshUtility {
 
@@ -100,6 +101,26 @@ namespace TakeAshUtility {
                         );
                 }).Where(item => item != null);
             return String.Join(separator, properties.Concat(fields));
+        }
+
+        public static Dictionary<string, string> ToHash(this string text, string separator = ",") {
+            if (String.IsNullOrEmpty(text) || String.IsNullOrEmpty(separator)) {
+                return null;
+            }
+            var regNonPrimitiveValue = new Regex(@"(\{[^\}]+\})");
+            var escapedSeparator = "[[" + String.Join("", Encoding.UTF8.GetBytes(separator).Select(x => x.ToString("X2"))) + "]]";
+            text = regNonPrimitiveValue.Replace(text, (m) => m.Value.Replace(separator, escapedSeparator));
+            return text.SplitTrim(new[] { separator })
+                .Select(pair => {
+                    var index = pair.IndexOf(":");
+                    var key = pair.Substring(0, index);
+                    var value = pair.Substring(index + 1);
+                    if (value != null && value.First() == '{' && value.Last() == '}') {
+                        value = value.Substring(1, value.Length - 2)
+                            .Replace(escapedSeparator, separator);
+                    }
+                    return new KeyValuePair<string, string>(key, value);
+                }).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
     }
 }
