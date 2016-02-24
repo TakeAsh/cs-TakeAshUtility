@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+
+namespace TakeAshUtility {
+    
+    public static class GenericExtensionMethods {
+
+        private const BindingFlags _flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly;
+
+        /// <summary>
+        /// Duplicate properties from source to destination.
+        /// </summary>
+        /// <typeparam name="T">Type of destination and source</typeparam>
+        /// <param name="destination">Destination to be overwrited</param>
+        /// <param name="source">Source of properties</param>
+        public static void Duplicate<T>(this T destination, T source) {
+            var _properties = typeof(T).GetProperties(_flags)
+                .Where(property => property.CanWrite == true &&
+                    property.GetSetMethod() != null &&
+                    property.GetGetMethod() != null &&
+                    property.GetIndexParameters().Length == 0
+                ).SafeToArray();
+            if (destination == null || source == null || _properties == null) {
+                return;
+            }
+            _properties.ForEach(property => property.SetValue(destination, property.GetValue(source, null), null));
+        }
+    }
+}

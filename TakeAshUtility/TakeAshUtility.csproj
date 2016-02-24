@@ -76,6 +76,7 @@
     <Compile Include="EventHandlerExtensionMethods.cs" />
     <Compile Include="ExceptionExtensionMethods.cs" />
     <Compile Include="FileFilter.cs" />
+    <Compile Include="GenericExtensionMethods.cs" />
     <Compile Include="ICollectionExtensionMethods.cs" />
     <Compile Include="IComparableExtensionMethods.cs" />
     <Compile Include="IEnumerableExtensionMethods.cs" />
