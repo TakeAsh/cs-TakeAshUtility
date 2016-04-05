@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BytesExtensionMethods_Test.cs" />
     <Compile Include="CRC32_Test.cs" />
     <Compile Include="EndPointExtensionMethods_Test.cs" />
     <Compile Include="IComparableExtensionMethods_Test.cs" />
