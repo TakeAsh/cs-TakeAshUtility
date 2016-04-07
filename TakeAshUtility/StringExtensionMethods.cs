@@ -175,5 +175,49 @@ namespace TakeAshUtility {
             }
             return bytes;
         }
+
+        /// <summary>
+        /// Convert string to byte array as Ascii85 encoding.
+        /// </summary>
+        /// <param name="text">The Ascii85 encoded string.</param>
+        /// <returns>The byte array.</returns>
+        public static byte[] ToBytesAsAscii85Encoding(this string text) {
+            if (text == null) {
+                return null;
+            }
+            text = text.RemoveWhitespace();
+            var bytes = new List<byte>();
+            var index = 0;
+            var padded = 0;
+            while (index < text.Length) {
+                if (text[index] == '~' && text[index + 1] == '>') {
+                    break;
+                } else if (text[index] == 'z') {
+                    bytes.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 });
+                    ++index;
+                } else if (text[index] == 'y') {
+                    bytes.AddRange(new byte[] { 0x20, 0x20, 0x20, 0x20 });
+                    ++index;
+                } else {
+                    uint value = 0;
+                    for (var i = 0; i < 5; ++i) {
+                        value *= 85;
+                        value += index + i < text.Length ?
+                            (uint)(text[index + i] - '!') :
+                            'u' - '!';
+                    }
+                    bytes.AddRange(new byte[] {
+                        (byte)((value >> 24) & 0xff),
+                        (byte)((value >> 16) & 0xff),
+                        (byte)((value >>  8) & 0xff),
+                        (byte)(value & 0xff),
+                    });
+                    index += 5;
+                }
+            }
+            return padded == 0 ?
+                bytes.ToArray() :
+                bytes.Take(bytes.Count - padded).ToArray();
+        }
     }
 }
