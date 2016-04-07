@@ -141,5 +141,20 @@ namespace TakeAshUtility {
         public static IEnumerable<string> Quotemeta(this IEnumerable<string> source) {
             return source.Select(text => Quotemeta(text));
         }
+
+        /// <summary>
+        /// Remove all whitespace from string.
+        /// </summary>
+        /// <param name="text">The string that contains white space.</param>
+        /// <returns>The white space removed string.</returns>
+        /// <remarks>
+        /// [c# - Efficient way to remove ALL whitespace from String? - Stack Overflow](http://stackoverflow.com/questions/6219454/)
+        /// </remarks>
+        public static string RemoveWhitespace(this string text) {
+            if (text == null) {
+                return null;
+            }
+            return String.Join("", text.Split());
+        }
     }
 }

@@ -331,5 +331,18 @@ namespace TakeAshUtility_Test {
         public void Quotemeta_stringArray_Test() {
             CollectionAssert.AreEqual(expecteds, inputs.Quotemeta());
         }
+
+        [TestCase(null, null)]
+        [TestCase("", "")]
+        [TestCase("123 \t 123 1adc \n 222", "1231231adc222")]
+        [TestCase(" test test    test", "testtesttest")]
+        public void RemoveWhitespace_Test(string input, string expected) {
+            var actual = input.RemoveWhitespace();
+            if (expected != null) {
+                Assert.AreEqual(expected, actual);
+            } else {
+                Assert.Null(actual);
+            }
+        }
     }
 }
