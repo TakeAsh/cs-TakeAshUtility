@@ -14,6 +14,7 @@ namespace TakeAshUtility {
         /// <param name="bytes">The byte array to be sought.</param>
         /// <param name="pattern">The pattern to seek.</param>
         /// <param name="startIndex">The search starting index.</param>
+        /// <param name="endIndex">The search ending index.</param>
         /// <returns>
         /// <list type="bullet">
         /// <item>The zero-based indexes of pattern, if the pattern is found.</item>
@@ -26,7 +27,8 @@ namespace TakeAshUtility {
         public static List<int> IndexesOf(
             this byte[] bytes,
             byte[] pattern,
-            int startIndex = 0
+            int startIndex = 0,
+            int endIndex = int.MaxValue
         ) {
             if (bytes == null ||
                 pattern == null ||
@@ -35,9 +37,13 @@ namespace TakeAshUtility {
                 bytes.Length < pattern.Length) {
                 return null;
             }
+            if (endIndex > bytes.Length) {
+                endIndex = bytes.Length;
+            }
             var indexes = new List<int>();
-            for (var i = startIndex; i < bytes.Length; ++i) {
-                if (!IsMatch(bytes, i, pattern)) {
+            for (var i = startIndex; i < endIndex; ++i) {
+                if (pattern.Length > endIndex - i ||
+                    !IsMatch(bytes, i, pattern)) {
                     continue;
                 }
                 indexes.Add(i);
@@ -48,9 +54,6 @@ namespace TakeAshUtility {
         }
 
         private static bool IsMatch(byte[] array, int position, byte[] pattern) {
-            if (pattern.Length > (array.Length - position)) {
-                return false;
-            }
             for (int i = 0; i < pattern.Length; ++i) {
                 if (array[position + i] != pattern[i]) {
                     return false;
