@@ -156,5 +156,24 @@ namespace TakeAshUtility {
             }
             return String.Join("", text.Split());
         }
+
+        /// <summary>
+        /// Convert string to byte array as Hex encoding.
+        /// </summary>
+        /// <param name="text">The Hex encoded string.</param>
+        /// <returns>The byte array.</returns>
+        public static byte[] ToBytesAsHexEncoding(this string text) {
+            if (text == null) {
+                return null;
+            }
+            text = text.RemoveWhitespace();
+            var len = (text.Length + 1) / 2;
+            var bytes = new byte[len];
+            var index = 0;
+            for (var i = 0; i < len; ++i, index += 2) {
+                bytes[i] = Convert.ToByte(text.Substring(index, 2), 16);
+            }
+            return bytes;
+        }
     }
 }
