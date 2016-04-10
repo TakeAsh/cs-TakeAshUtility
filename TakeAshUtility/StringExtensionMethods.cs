@@ -202,9 +202,12 @@ namespace TakeAshUtility {
                     uint value = 0;
                     for (var i = 0; i < 5; ++i) {
                         value *= 85;
-                        value += index + i < text.Length ?
-                            (uint)(text[index + i] - '!') :
-                            'u' - '!';
+                        if (index + i < text.Length) {
+                            value += (uint)(text[index + i] - '!');
+                        } else {
+                            value += 'u' - '!';
+                            ++padded;
+                        }
                     }
                     bytes.AddRange(new byte[] {
                         (byte)((value >> 24) & 0xff),
