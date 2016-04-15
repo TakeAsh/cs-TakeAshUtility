@@ -66,5 +66,33 @@ namespace TakeAshUtility_Test {
                 Assert.IsNull(actual);
             }
         }
+
+        [TestCase(null, null)]
+        [TestCase(typeof(int), default(int))] // primitive
+        [TestCase(typeof(double), default(double))]
+        [TestCase(typeof(bool), default(bool))]
+        [TestCase(typeof(DayOfWeek), default(DayOfWeek))] // enum
+        [TestCase(typeof(DateTime), null)] // struct
+        [TestCase(typeof(TimeSpan), null)]
+        [TestCase(typeof(string), null)] // class
+        [TestCase(typeof(int[]), null)]
+        [TestCase(typeof(List<int>), null)]
+        [TestCase(typeof(Nullable<DateTime>), null)]
+        [TestCase(typeof(Nullable<TimeSpan>), null)]
+        public void GetDefaultValue_Test(Type type, object expected) {
+            if (type == null) {
+                Assert.Null(type.GetDefaultValue());
+                return;
+            }
+            switch (type.Name) {
+                case "DateTime":
+                    expected = default(DateTime);
+                    break;
+                case "TimeSpan":
+                    expected = default(TimeSpan);
+                    break;
+            }
+            Assert.AreEqual(expected, type.GetDefaultValue());
+        }
     }
 }

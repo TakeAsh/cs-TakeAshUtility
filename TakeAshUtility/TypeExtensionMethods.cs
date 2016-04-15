@@ -84,5 +84,19 @@ namespace TakeAshUtility {
             }
             return false;
         }
+
+        /// <summary>
+        /// Get default value of the type at Runtime
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The default value of the type.</returns>
+        /// <remarks>
+        /// [c# - Default value of a type at Runtime - Stack Overflow](http://stackoverflow.com/questions/2490244/)
+        /// </remarks>
+        public static object GetDefaultValue(this Type type) {
+            return type == null || !type.IsValueType ?
+                null :
+                Activator.CreateInstance(type);
+        }
     }
 }
