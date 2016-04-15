@@ -52,7 +52,13 @@ namespace TakeAshUtility {
             }
         }
 
+        public bool SkipIfDefault { get; set; }
+
         public string ToString(string name, Type type, object value) {
+            if (SkipIfDefault &&
+                (value == null || value.Equals(type.GetDefaultValue()))) {
+                return null;
+            }
             var valueString = _typeConverter != null ? _typeConverter.ConvertToString(value) :
                 !String.IsNullOrEmpty(Format) ? String.Format(Format, value) :
                 value;
