@@ -157,6 +157,15 @@ namespace TakeAshUtility {
             return String.Join("", text.Split());
         }
 
+        private static char[] _ctrlCodes = Enumerable.Range(0, 0x20)
+            .Where(c => c != 0x09 && c != 0x0a && c != 0x0d)
+            .Select(c => (char)c)
+            .ToArray();
+
+        public static string RemoveControlCode(this string text) {
+            return String.Join("", text.Split(_ctrlCodes, StringSplitOptions.None));
+        }
+
         /// <summary>
         /// Convert string to byte array as Hex encoding.
         /// </summary>
