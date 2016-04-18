@@ -70,4 +70,13 @@ namespace TakeAshUtility {
             return base.ConvertFrom(context, culture, value);
         }
     }
+
+    public static class StringifyHelper {
+
+        public static T To<T>(this string text)
+            where T : IStringify<T>, new() {
+
+            return (new T()).FromString(text);
+        }
+    }
 }
