@@ -331,5 +331,11 @@ namespace TakeAshUtility {
             }
             return source.ToList();
         }
+
+        public static int SafeCount<T>(this IEnumerable<T> source) {
+            return source == null ?
+                0 :
+                source.Count();
+        }
     }
 }
