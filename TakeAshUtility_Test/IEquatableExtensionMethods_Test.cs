@@ -184,7 +184,7 @@ namespace TakeAshUtility_Test {
             #region IEquatable
 
             public bool Equals(Person other) {
-                if (other == null) {
+                if ((object)other == null) {
                     return false;
                 }
                 if (ReferenceEquals(this, other)) {
