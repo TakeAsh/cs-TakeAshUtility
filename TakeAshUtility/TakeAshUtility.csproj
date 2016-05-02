@@ -72,6 +72,7 @@
     <Compile Include="ApplicationSettingsBaseExtensionMethods.cs" />
     <Compile Include="Base64Converter.cs" />
     <Compile Include="BytesExtensionMethods.cs" />
+    <Compile Include="ConsoleEx.cs" />
     <Compile Include="CRC32.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="EndPointExtensionMethods.cs" />
