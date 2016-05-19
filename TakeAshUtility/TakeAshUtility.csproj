@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationSettingsBaseExtensionMethods.cs" />
+    <Compile Include="AssemblyExtensionMethods.cs" />
     <Compile Include="Base64Converter.cs" />
     <Compile Include="BytesExtensionMethods.cs" />
     <Compile Include="ConsoleEx.cs" />
