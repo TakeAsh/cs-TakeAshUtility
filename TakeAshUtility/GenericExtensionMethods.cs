@@ -45,5 +45,27 @@ namespace TakeAshUtility {
                 pi.SetValue(destination, pi.GetValue(source, null), null);
             });
         }
+
+        /// <summary>
+        /// Check the value is between the minimum and the maximum.
+        /// </summary>
+        /// <typeparam name="T">The type of the value</typeparam>
+        /// <param name="value">The value</param>
+        /// <param name="minimum">The minimum value of the range</param>
+        /// <param name="maximum">The maximum value of the range</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>true, if the value is in the range.</item>
+        /// <item>false, if the value is out of the range.</item>
+        /// </list>
+        /// </returns>
+        /// <remarks>
+        /// [c# - What's the Comparer&lt;T&gt; class for? - Stack Overflow](http://stackoverflow.com/questions/2843212/)
+        /// </remarks>
+        public static bool Between<T>(this T value, T minimum, T maximum) {
+            var comparer = Comparer<T>.Default;
+            return comparer.Compare(value, minimum) >= 0 &&
+                comparer.Compare(value, maximum) <= 0;
+        }
     }
 }
