@@ -42,5 +42,16 @@ namespace TakeAshUtility {
                 enumType.Name + "_" +
                 en.ToString();
         }
+
+        /// <summary>
+        /// Get the all values of Enum as T type array.
+        /// </summary>
+        /// <typeparam name="T">The type of Enum</typeparam>
+        /// <returns>The Enum type values.</returns>
+        public static T[] GetValues<T>()
+            where T : struct, IConvertible {
+
+            return (T[])Enum.GetValues(typeof(T));
+        }
     }
 }
