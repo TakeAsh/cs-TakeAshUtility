@@ -77,6 +77,7 @@
     <Compile Include="CRC32.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="EndPointExtensionMethods.cs" />
+    <Compile Include="EnumHelper.cs" />
     <Compile Include="EventHandlerExtensionMethods.cs" />
     <Compile Include="ExceptionExtensionMethods.cs" />
     <Compile Include="FileFilter.cs" />
