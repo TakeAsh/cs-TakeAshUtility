@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace TakeAshUtility {
 
-    public static class AssemblyExtensionMethods {
+    public static class AssemblyHelper {
 
         public static T GetAttribute<T>(this Assembly assembly)
             where T : Attribute {
