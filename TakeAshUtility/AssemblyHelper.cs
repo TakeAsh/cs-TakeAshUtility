@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
+using System.Resources;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TakeAshUtility {
 
     public static class AssemblyHelper {
+
+        private static readonly Regex regPropertyResources = new Regex(@"\.Properties\.");
+        private static readonly Regex regLastResources = new Regex(@"\.resources$");
 
         public static T GetAttribute<T>(this Assembly assembly)
             where T : Attribute {
@@ -34,6 +39,15 @@ namespace TakeAshUtility {
                     .GetAssemblies()
                     .Where(assembly => assembly.GetName().Name == name)
                     .FirstOrDefault();
+        }
+
+        public static ResourceManager GetResourceManager(this Assembly assembly) {
+            var resourceName = assembly.GetManifestResourceNames()
+                .Where(name => regPropertyResources.IsMatch(name))
+                .FirstOrDefault();
+            return String.IsNullOrEmpty(resourceName) ?
+                null :
+                new ResourceManager(regLastResources.Replace(resourceName, String.Empty), assembly);
         }
     }
 }
