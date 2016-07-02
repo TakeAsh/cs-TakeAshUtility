@@ -158,5 +158,20 @@ namespace TakeAshUtility {
                 en.ToLocalization(assembly) ?? en.ToString()
             );
         }
+
+        public static TAttr GetAttribute<TEnum, TAttr>(this TEnum en, Func<TAttr, bool> predicate = null)
+            where TEnum : struct, IConvertible
+            where TAttr : Attribute {
+
+            TAttr[] attrs;
+            var memInfos = en.GetType().GetMember(en.ToString());
+            if (memInfos.SafeCount() == 0 ||
+                (attrs = memInfos.First().GetCustomAttributes(typeof(TAttr), false) as TAttr[]).SafeCount() == 0) {
+                return null;
+            }
+            return predicate == null ?
+                attrs.FirstOrDefault() :
+                attrs.FirstOrDefault(predicate);
+        }
     }
 }
