@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
@@ -172,6 +173,15 @@ namespace TakeAshUtility {
             return predicate == null ?
                 attrs.FirstOrDefault() :
                 attrs.FirstOrDefault(predicate);
+        }
+
+        public static string ToDescription<TEnum>(this TEnum en)
+            where TEnum : struct, IConvertible {
+
+            var descriptionAttribute = en.GetAttribute<TEnum, DescriptionAttribute>();
+            return descriptionAttribute == null ?
+                null :
+                descriptionAttribute.Description;
         }
     }
 }
