@@ -13,7 +13,7 @@ namespace TakeAshUtility {
         /// <summary>
         /// Get localized string from the resource in the assembly.
         /// </summary>
-        /// <typeparam name="T">The type of the enum.</typeparam>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="en">The enum.</param>
         /// <param name="assemblyName">
         /// The name of the assembly to be searched.
@@ -25,8 +25,8 @@ namespace TakeAshUtility {
         /// <item>null, if not exist.</item>
         /// </list>
         /// </returns>
-        public static string ToLocalization<T>(this T en, string assemblyName = null)
-            where T : struct, IConvertible {
+        public static string ToLocalization<TEnum>(this TEnum en, string assemblyName = null)
+            where TEnum : struct, IConvertible {
 
             return en.ToLocalization(AssemblyHelper.GetAssembly(assemblyName)) ??
                 en.ToLocalization(Assembly.GetCallingAssembly()) ??
@@ -36,7 +36,7 @@ namespace TakeAshUtility {
         /// <summary>
         /// Get localized string from the resource in the assembly.
         /// </summary>
-        /// <typeparam name="T">The type of the enum.</typeparam>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="en">The enum.</param>
         /// <param name="assembly">The assembly.</param>
         /// <returns>
@@ -45,8 +45,8 @@ namespace TakeAshUtility {
         /// <item>null, if not exist.</item>
         /// </list>
         /// </returns>
-        public static string ToLocalization<T>(this T en, Assembly assembly)
-            where T : struct, IConvertible {
+        public static string ToLocalization<TEnum>(this TEnum en, Assembly assembly)
+            where TEnum : struct, IConvertible {
 
             ResourceManager resourceManager;
             if (assembly == null ||
@@ -59,11 +59,11 @@ namespace TakeAshUtility {
         /// <summary>
         /// Get the resource name for the enum.
         /// </summary>
-        /// <typeparam name="T">The type of the enum.</typeparam>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="en">The enum.</param>
         /// <returns>The resource name.</returns>
-        public static string ToResourceName<T>(this T en)
-            where T : struct, IConvertible {
+        public static string ToResourceName<TEnum>(this TEnum en)
+            where TEnum : struct, IConvertible {
 
             var enumType = en.GetType();
             return (enumType.ReflectedType != null ? enumType.ReflectedType.Name + "_" : "") +
@@ -74,28 +74,28 @@ namespace TakeAshUtility {
         /// <summary>
         /// Get the all values of Enum as T type array.
         /// </summary>
-        /// <typeparam name="T">The type of Enum</typeparam>
+        /// <typeparam name="TEnum">The type of Enum</typeparam>
         /// <returns>The Enum type values.</returns>
-        public static T[] GetValues<T>()
-            where T : struct, IConvertible {
+        public static TEnum[] GetValues<TEnum>()
+            where TEnum : struct, IConvertible {
 
-            return Enum.GetValues(typeof(T)) as T[];
+            return Enum.GetValues(typeof(TEnum)) as TEnum[];
         }
 
         /// <summary>
         /// Convert the enums to the localized KeyValuePairs.
         /// </summary>
-        /// <typeparam name="T">The type of the enum.</typeparam>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="source">The enums.</param>
         /// <param name="assemblyName">
         /// The name of the assembly to be searched.
         /// If name is null, CallingAssembly is used.
         /// </param>
         /// <returns>The localized KeyValuePairs.</returns>
-        public static KeyValuePair<T, string>[] ToLocalizedPairs<T>(
-            this IEnumerable<T> source,
+        public static KeyValuePair<TEnum, string>[] ToLocalizedPairs<TEnum>(
+            this IEnumerable<TEnum> source,
             string assemblyName = null
-        ) where T : struct, IConvertible {
+        ) where TEnum : struct, IConvertible {
 
             var assembly = AssemblyHelper.GetAssembly(assemblyName) ??
                 Assembly.GetCallingAssembly();
@@ -105,14 +105,14 @@ namespace TakeAshUtility {
         /// <summary>
         /// Convert the enums to the localized KeyValuePairs.
         /// </summary>
-        /// <typeparam name="T">The type of the enum.</typeparam>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="source">The enums.</param>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The localized KeyValuePairs.</returns>
-        public static KeyValuePair<T, string>[] ToLocalizedPairs<T>(
-            this IEnumerable<T> source,
+        public static KeyValuePair<TEnum, string>[] ToLocalizedPairs<TEnum>(
+            this IEnumerable<TEnum> source,
             Assembly assembly
-        ) where T : struct, IConvertible {
+        ) where TEnum : struct, IConvertible {
 
             if (source.SafeCount() == 0 ||
                 assembly == null) {
@@ -125,17 +125,17 @@ namespace TakeAshUtility {
         /// <summary>
         /// Get the localized KeyValuePair.
         /// </summary>
-        /// <typeparam name="T">The type of the enum.</typeparam>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="en">The enum.</param>
         /// <param name="assemblyName">
         /// The name of the assembly to be searched.
         /// If name is null, CallingAssembly is used.
         /// </param>
         /// <returns>The localized KeyValuePair.</returns>
-        public static KeyValuePair<T, string> ToLocalizedPair<T>(
-            this T en,
+        public static KeyValuePair<TEnum, string> ToLocalizedPair<TEnum>(
+            this TEnum en,
             string assemblyName = null
-        ) where T : struct, IConvertible {
+        ) where TEnum : struct, IConvertible {
 
             var assembly = AssemblyHelper.GetAssembly(assemblyName) ??
                 Assembly.GetCallingAssembly();
@@ -145,16 +145,16 @@ namespace TakeAshUtility {
         /// <summary>
         /// Get the localized KeyValuePair.
         /// </summary>
-        /// <typeparam name="T">The type of the enum.</typeparam>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="en">The enum.</param>
         /// <param name="assembly">The assembly.</param>
         /// <returns>The localized KeyValuePair.</returns>
-        public static KeyValuePair<T, string> ToLocalizedPair<T>(
-            this T en,
+        public static KeyValuePair<TEnum, string> ToLocalizedPair<TEnum>(
+            this TEnum en,
             Assembly assembly
-        ) where T : struct, IConvertible {
+        ) where TEnum : struct, IConvertible {
 
-            return new KeyValuePair<T, string>(
+            return new KeyValuePair<TEnum, string>(
                 en,
                 en.ToLocalization(assembly) ?? en.ToString()
             );
