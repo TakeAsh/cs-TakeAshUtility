@@ -27,9 +27,9 @@ namespace TakeAshUtility {
         public static string ToLocalization<T>(this T en, string assemblyName = null)
             where T : struct, IConvertible {
 
-            var assembly = AssemblyHelper.GetAssembly(assemblyName) ??
-                Assembly.GetCallingAssembly();
-            return en.ToLocalization(assembly);
+            return en.ToLocalization(AssemblyHelper.GetAssembly(assemblyName)) ??
+                en.ToLocalization(Assembly.GetCallingAssembly()) ??
+                en.ToLocalization(en.GetType().Assembly);
         }
 
         /// <summary>
