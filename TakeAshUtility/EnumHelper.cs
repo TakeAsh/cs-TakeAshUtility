@@ -10,6 +10,20 @@ namespace TakeAshUtility {
 
     public static class EnumHelper {
 
+        public static string ToLocalizationEx<TEnum>(
+            this TEnum en,
+            string assemblyName = null,
+            Assembly callingAssembly = null
+        ) where TEnum : struct, IConvertible {
+
+            callingAssembly = callingAssembly ?? Assembly.GetCallingAssembly();
+            return en.ToLocalization(AssemblyHelper.GetAssembly(assemblyName)) ??
+                en.ToLocalization(callingAssembly) ??
+                en.ToLocalization(typeof(TEnum).Assembly) ??
+                en.ToDescription() ??
+                en.ToString();
+        }
+
         /// <summary>
         /// Get localized string from the resource in the assembly.
         /// </summary>
@@ -25,12 +39,14 @@ namespace TakeAshUtility {
         /// <item>null, if not exist.</item>
         /// </list>
         /// </returns>
-        public static string ToLocalization<TEnum>(this TEnum en, string assemblyName = null)
-            where TEnum : struct, IConvertible {
+        public static string ToLocalization<TEnum>(
+            this TEnum en,
+            string assemblyName = null
+        ) where TEnum : struct, IConvertible {
 
             return en.ToLocalization(AssemblyHelper.GetAssembly(assemblyName)) ??
                 en.ToLocalization(Assembly.GetCallingAssembly()) ??
-                en.ToLocalization(en.GetType().Assembly);
+                en.ToLocalization(typeof(TEnum).Assembly);
         }
 
         /// <summary>
@@ -65,9 +81,8 @@ namespace TakeAshUtility {
         public static string ToResourceName<TEnum>(this TEnum en)
             where TEnum : struct, IConvertible {
 
-            var enumType = en.GetType();
-            return (enumType.ReflectedType != null ? enumType.ReflectedType.Name + "_" : "") +
-                enumType.Name + "_" +
+            return (typeof(TEnum).ReflectedType != null ? typeof(TEnum).ReflectedType.Name + "_" : "") +
+                typeof(TEnum).Name + "_" +
                 en.ToString();
         }
 
@@ -94,70 +109,13 @@ namespace TakeAshUtility {
         /// <returns>The localized KeyValuePairs.</returns>
         public static KeyValuePair<TEnum, string>[] ToLocalizedPairs<TEnum>(
             this IEnumerable<TEnum> source,
-            string assemblyName = null
+            string assemblyName = null,
+            Assembly callingAssembly = null
         ) where TEnum : struct, IConvertible {
 
-            var assembly = AssemblyHelper.GetAssembly(assemblyName) ??
-                Assembly.GetCallingAssembly();
-            return source.ToLocalizedPairs(assembly);
-        }
-
-        /// <summary>
-        /// Convert the enums to the localized KeyValuePairs.
-        /// </summary>
-        /// <typeparam name="TEnum">The type of the enum.</typeparam>
-        /// <param name="source">The enums.</param>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns>The localized KeyValuePairs.</returns>
-        public static KeyValuePair<TEnum, string>[] ToLocalizedPairs<TEnum>(
-            this IEnumerable<TEnum> source,
-            Assembly assembly
-        ) where TEnum : struct, IConvertible {
-
-            if (source.SafeCount() == 0 ||
-                assembly == null) {
-                return null;
-            }
-            return source.Select(en => en.ToLocalizedPair(assembly))
+            callingAssembly = callingAssembly ?? Assembly.GetCallingAssembly();
+            return source.Select(en => new KeyValuePair<TEnum, string>(en, en.ToLocalizationEx(assemblyName, callingAssembly)))
                 .SafeToArray();
-        }
-
-        /// <summary>
-        /// Get the localized KeyValuePair.
-        /// </summary>
-        /// <typeparam name="TEnum">The type of the enum.</typeparam>
-        /// <param name="en">The enum.</param>
-        /// <param name="assemblyName">
-        /// The name of the assembly to be searched.
-        /// If name is null, CallingAssembly is used.
-        /// </param>
-        /// <returns>The localized KeyValuePair.</returns>
-        public static KeyValuePair<TEnum, string> ToLocalizedPair<TEnum>(
-            this TEnum en,
-            string assemblyName = null
-        ) where TEnum : struct, IConvertible {
-
-            var assembly = AssemblyHelper.GetAssembly(assemblyName) ??
-                Assembly.GetCallingAssembly();
-            return en.ToLocalizedPair(assembly);
-        }
-
-        /// <summary>
-        /// Get the localized KeyValuePair.
-        /// </summary>
-        /// <typeparam name="TEnum">The type of the enum.</typeparam>
-        /// <param name="en">The enum.</param>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns>The localized KeyValuePair.</returns>
-        public static KeyValuePair<TEnum, string> ToLocalizedPair<TEnum>(
-            this TEnum en,
-            Assembly assembly
-        ) where TEnum : struct, IConvertible {
-
-            return new KeyValuePair<TEnum, string>(
-                en,
-                en.ToLocalization(assembly) ?? en.ToString()
-            );
         }
 
         public static TAttr GetAttribute<TEnum, TAttr>(this TEnum en, Func<TAttr, bool> predicate = null)
