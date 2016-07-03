@@ -67,6 +67,7 @@
     <Compile Include="BytesExtensionMethods_Test.cs" />
     <Compile Include="CRC32_Test.cs" />
     <Compile Include="EndPointExtensionMethods_Test.cs" />
+    <Compile Include="EnumHelper_Test.cs" />
     <Compile Include="GenericExtensionMethods_Test.cs" />
     <Compile Include="IComparableExtensionMethods_Test.cs" />
     <Compile Include="IEnumerableExtensionMethods_Test.cs" />
