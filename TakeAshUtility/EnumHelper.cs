@@ -10,22 +10,62 @@ namespace TakeAshUtility {
 
     public static class EnumHelper {
 
+        /// <summary>
+        /// Get the localized string for the enum.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
+        /// <param name="en">The enum.</param>
+        /// <param name="assemblyName">The name to specify the assembly.</param>
+        /// <param name="callingAssembly">The calling assembly.</param>
+        /// <returns>
+        /// The localized string that is searched from below list.
+        /// <list type="bullet">
+        /// <item>The assembly that is specified by the "assemblyName".</item>
+        /// <item>The assembly that is specified by the "callingAssembly".</item>
+        /// <item>The assembly that the enum is defined.</item>
+        /// <item>The Description attribute of the enum.</item>
+        /// <item>The name of the enum.</item>
+        /// </list>
+        /// </returns>
         public static string ToLocalizationEx<TEnum>(
             this TEnum en,
             string assemblyName = null,
             Assembly callingAssembly = null
         ) where TEnum : struct, IConvertible {
 
-            callingAssembly = callingAssembly ?? Assembly.GetCallingAssembly();
             return en.ToLocalization(AssemblyHelper.GetAssembly(assemblyName)) ??
-                en.ToLocalization(callingAssembly) ??
+                en.ToLocalization(callingAssembly ?? Assembly.GetCallingAssembly()) ??
                 en.ToLocalization(typeof(TEnum).Assembly) ??
                 en.ToDescription() ??
                 en.ToString();
         }
 
         /// <summary>
-        /// Get localized string from the resource in the assembly.
+        /// Get the localized string for the nullable enum.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
+        /// <param name="en">The nullable enum.</param>
+        /// <param name="assemblyName">The name to specify the assembly.</param>
+        /// <param name="callingAssembly">The calling assembly.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>The localized string, if the nullable enum is not null.</item>
+        /// <item>null, if the nullable enum is null.</item>
+        /// </list>
+        /// </returns>
+        public static string ToLocalizationEx<TEnum>(
+            this Nullable<TEnum> en,
+            string assemblyName = null,
+            Assembly callingAssembly = null
+        ) where TEnum : struct, IConvertible {
+
+            return en == null ?
+                null :
+                en.Value.ToLocalizationEx(assemblyName, callingAssembly ?? Assembly.GetCallingAssembly());
+        }
+
+        /// <summary>
+        /// Get the localized string for the enum from the resource in the assembly.
         /// </summary>
         /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="en">The enum.</param>
@@ -50,7 +90,7 @@ namespace TakeAshUtility {
         }
 
         /// <summary>
-        /// Get localized string from the resource in the assembly.
+        /// Get the localized string for the enum from the resource in the assembly.
         /// </summary>
         /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="en">The enum.</param>
@@ -87,7 +127,7 @@ namespace TakeAshUtility {
         }
 
         /// <summary>
-        /// Get the all values of Enum as T type array.
+        /// Get the all values of Enum as TEnum type array.
         /// </summary>
         /// <typeparam name="TEnum">The type of Enum</typeparam>
         /// <returns>The Enum type values.</returns>
