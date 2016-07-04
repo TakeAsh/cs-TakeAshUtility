@@ -146,6 +146,7 @@ namespace TakeAshUtility {
         /// The name of the assembly to be searched.
         /// If name is null, CallingAssembly is used.
         /// </param>
+        /// <param name="callingAssembly">The calling assembly.</param>
         /// <returns>The localized KeyValuePairs.</returns>
         public static KeyValuePair<TEnum, string>[] ToLocalizedPairs<TEnum>(
             this IEnumerable<TEnum> source,
@@ -180,6 +181,18 @@ namespace TakeAshUtility {
             return descriptionAttribute == null ?
                 null :
                 descriptionAttribute.Description;
+        }
+
+        static public string GetEnumProperty<TEnum>(this TEnum en, string key)
+            where TEnum : struct, IConvertible {
+
+            if (key == null) {
+                return null;
+            }
+            var enumProperty = en.GetAttribute<TEnum, EnumPropertyAttribute>(attr => attr.ContainsKey(key));
+            return enumProperty == null ?
+                null :
+                enumProperty[key];
         }
     }
 }

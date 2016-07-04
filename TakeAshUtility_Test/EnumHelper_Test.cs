@@ -88,24 +88,54 @@ namespace TakeAshUtility_Test {
                 .ToLocalizedPairs();
             CollectionAssert.AreEqual(_newLineCodesLocalizedPairs[index], actual, culture);
         }
+
+        [TestCase(Options.NewLineCodes.Lf, "\n", "\"\'\t")]
+        [TestCase(Options.NewLineCodes.Cr, "\r", "\'\"")]
+        [TestCase(Options.NewLineCodes.CrLf, "\r\n", "あ")]
+        [TestCase(Options.NewLineCodes.LfCr, "\n\r", "\uD842\uDFB7")]
+        [TestCase((Options.NewLineCodes)1, "\n", "\x22\u0027\x09")]
+        [TestCase((Options.NewLineCodes)2, "\r", "\u0027\x22")]
+        [TestCase((Options.NewLineCodes)4, "\r\n", "\u3042")]
+        [TestCase((Options.NewLineCodes)8, "\n\r", "\xD842\xDFB7")]
+        [TestCase((Options.NewLineCodes)0, null, null)]
+        [TestCase((Options.NewLineCodes)3, null, null)]
+        public void GetExtraProperty_Test(Options.NewLineCodes item, string expectedEntity, string expectedEscaped) {
+            var actualEntity = item.GetEnumProperty(Options.EntityProperty);
+            if (expectedEntity != null) {
+                Assert.AreEqual(expectedEntity, actualEntity);
+            } else {
+                Assert.Null(actualEntity);
+            }
+            var actualEscaped = item.GetEnumProperty(Options.EscapedProperty);
+            if (expectedEscaped != null) {
+                Assert.AreEqual(expectedEscaped, actualEscaped);
+            } else {
+                Assert.Null(actualEscaped);
+            }
+        }
     }
 
-    public class Options {
+    public static class Options {
+
+        public const string EntityProperty = "Entity";
+        public const string EscapedProperty = "Escaped";
 
         //[TypeConverter(typeof(EnumTypeConverter<NewLineCodes>))]
         public enum NewLineCodes {
-            //[ExtraProperties("Entity:'\n', Escaped:'\\x22\\u0027\t'")]
+            [EnumProperty(EntityProperty + ":'\n'")]
+            [EnumProperty(EscapedProperty + ":'\\x22\\u0027\t'")]
             Lf = 1,
 
-            //[ExtraProperties("Entity : \"\r\"Escaped : '\\x0027\\x0022'")]
+            [EnumProperty(EntityProperty + " : \"\r\"" + EscapedProperty + " : '\\x0027\\x0022'")]
             [System.ComponentModel.Description("[A] Mac(CR)")]
             Cr = 2,
 
-            //[ExtraProperties("Entity:\t'\r\n';;;Escaped:\t\"\\x3042\"")] // U+3042 あ
+            [EnumProperty(EntityProperty + ":\t'\r\n';;;")]
+            [EnumProperty(EscapedProperty + ":\t\"\\x3042\"")] // U+3042 あ
             [System.ComponentModel.Description("[A] Windows(CR+LF)")]
             CrLf = 4,
 
-            //[ExtraProperties("Entity:\n\t'\n\r'\nEscaped:\n\t'\\uD842\\uDFB7'")] // U+00020BB7 𠮷
+            [EnumProperty(EntityProperty + ":\n\t'\n\r'\n" + EscapedProperty + ":\n\t'\\uD842\\uDFB7'")] // U+00020BB7 𠮷
             LfCr = 8,
         }
     }
