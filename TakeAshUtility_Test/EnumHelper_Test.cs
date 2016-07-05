@@ -113,6 +113,12 @@ namespace TakeAshUtility_Test {
                 Assert.Null(actualEscaped);
             }
         }
+
+        [TestCase]
+        public void GetAttribute_Test() {
+            var actual = EnumHelper.GetAttribute<Options.NewLineCodes, HexDigitAttribute>();
+            Assert.AreEqual(4, actual.Digit);
+        }
     }
 
     public static class Options {
@@ -121,6 +127,7 @@ namespace TakeAshUtility_Test {
         public const string EscapedProperty = "Escaped";
 
         //[TypeConverter(typeof(EnumTypeConverter<NewLineCodes>))]
+        [HexDigit(4)]
         public enum NewLineCodes {
             [EnumProperty(EntityProperty + ":'\n'")]
             [EnumProperty(EscapedProperty + ":'\\x22\\u0027\t'")]
@@ -138,5 +145,18 @@ namespace TakeAshUtility_Test {
             [EnumProperty(EntityProperty + ":\n\t'\n\r'\n" + EscapedProperty + ":\n\t'\\uD842\\uDFB7'")] // U+00020BB7 𠮷
             LfCr = 8,
         }
+    }
+
+    [AttributeUsage(AttributeTargets.Enum)]
+    public class HexDigitAttribute :
+        Attribute {
+
+        public HexDigitAttribute(int digit) {
+            Digit = digit;
+            Format = "X" + digit;
+        }
+
+        public int Digit { get; private set; }
+        public string Format { get; private set; }
     }
 }

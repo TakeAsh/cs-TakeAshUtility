@@ -164,13 +164,23 @@ namespace TakeAshUtility {
             where TAttr : Attribute {
 
             TAttr[] attrs;
-            var memInfos = en.GetType().GetMember(en.ToString());
+            var memInfos = typeof(TEnum).GetMember(en.ToString());
             if (memInfos.SafeCount() == 0 ||
                 (attrs = memInfos.First().GetCustomAttributes(typeof(TAttr), false) as TAttr[]).SafeCount() == 0) {
                 return null;
             }
             return predicate == null ?
                 attrs.FirstOrDefault() :
+                attrs.FirstOrDefault(predicate);
+        }
+
+        public static TAttr GetAttribute<TEnum, TAttr>(Func<TAttr, bool> predicate = null)
+            where TEnum : struct, IConvertible
+            where TAttr : Attribute {
+
+            var attrs = typeof(TEnum).GetCustomAttributes(typeof(TAttr), false) as TAttr[];
+            return attrs.SafeCount() == 0 ? null :
+                predicate == null ? attrs.FirstOrDefault() :
                 attrs.FirstOrDefault(predicate);
         }
 
