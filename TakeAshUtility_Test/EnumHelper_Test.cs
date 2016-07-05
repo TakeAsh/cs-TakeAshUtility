@@ -99,7 +99,7 @@ namespace TakeAshUtility_Test {
         [TestCase((Options.NewLineCodes)8, "\n\r", "\xD842\xDFB7")]
         [TestCase((Options.NewLineCodes)0, null, null)]
         [TestCase((Options.NewLineCodes)3, null, null)]
-        public void GetExtraProperty_Test(Options.NewLineCodes item, string expectedEntity, string expectedEscaped) {
+        public void GetEnumProperty_Test(Options.NewLineCodes item, string expectedEntity, string expectedEscaped) {
             var actualEntity = item.GetEnumProperty(Options.EntityProperty);
             if (expectedEntity != null) {
                 Assert.AreEqual(expectedEntity, actualEntity);
