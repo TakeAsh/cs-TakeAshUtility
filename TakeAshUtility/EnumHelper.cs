@@ -204,5 +204,16 @@ namespace TakeAshUtility {
                 null :
                 enumProperty[key];
         }
+
+        static public string ToHex<TEnum>(this TEnum en)
+            where TEnum : struct, IConvertible {
+
+            var hexDigit = GetAttribute<TEnum, HexDigitAttribute>();
+            var format = hexDigit == null || hexDigit.Digit <= 0 ?
+                "X" :
+                hexDigit.Format;
+            return Convert.ToInt32(en)
+                .ToString(format);
+        }
     }
 }

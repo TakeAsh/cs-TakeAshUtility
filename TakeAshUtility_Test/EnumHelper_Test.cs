@@ -58,6 +58,20 @@ namespace TakeAshUtility_Test {
             },
         };
 
+        [Flags]
+        [HexDigit(2)]
+        //[TypeConverter(typeof(EnumTypeConverter<WDays>))]
+        public enum WDays {
+            None = 0x00,
+            Sunday = 0x01,
+            Monday = 0x02,
+            Tuesday = 0x04,
+            Wednesday = 0x08,
+            Thursday = 0x10,
+            Friday = 0x20,
+            Saturday = 0x40
+        }
+
         private void SetCurrentCulture(string cultureName) {
             var culture = new CultureInfo(cultureName);
             Thread.CurrentThread.CurrentCulture = culture;
@@ -93,10 +107,10 @@ namespace TakeAshUtility_Test {
         [TestCase(Options.NewLineCodes.Cr, "\r", "\'\"")]
         [TestCase(Options.NewLineCodes.CrLf, "\r\n", "あ")]
         [TestCase(Options.NewLineCodes.LfCr, "\n\r", "\uD842\uDFB7")]
-        [TestCase((Options.NewLineCodes)1, "\n", "\x22\u0027\x09")]
-        [TestCase((Options.NewLineCodes)2, "\r", "\u0027\x22")]
-        [TestCase((Options.NewLineCodes)4, "\r\n", "\u3042")]
-        [TestCase((Options.NewLineCodes)8, "\n\r", "\xD842\xDFB7")]
+        [TestCase((Options.NewLineCodes)2, "\n", "\x22\u0027\x09")]
+        [TestCase((Options.NewLineCodes)8, "\r", "\u0027\x22")]
+        [TestCase((Options.NewLineCodes)16, "\r\n", "\u3042")]
+        [TestCase((Options.NewLineCodes)64, "\n\r", "\xD842\xDFB7")]
         [TestCase((Options.NewLineCodes)0, null, null)]
         [TestCase((Options.NewLineCodes)3, null, null)]
         public void GetEnumProperty_Test(Options.NewLineCodes item, string expectedEntity, string expectedEscaped) {
@@ -114,10 +128,37 @@ namespace TakeAshUtility_Test {
             }
         }
 
-        [TestCase]
-        public void GetAttribute_Test() {
-            var actual = EnumHelper.GetAttribute<Options.NewLineCodes, HexDigitAttribute>();
-            Assert.AreEqual(4, actual.Digit);
+        [TestCase(WDays.None, "00")]
+        [TestCase(WDays.Sunday, "01")]
+        [TestCase(WDays.Monday, "02")]
+        [TestCase(WDays.Tuesday, "04")]
+        [TestCase(WDays.Wednesday, "08")]
+        [TestCase(WDays.Thursday, "10")]
+        [TestCase(WDays.Friday, "20")]
+        [TestCase(WDays.Saturday, "40")]
+        [TestCase(WDays.Sunday | WDays.Monday, "03")]
+        [TestCase(WDays.Monday | WDays.Tuesday, "06")]
+        [TestCase(WDays.Tuesday | WDays.Wednesday, "0C")]
+        [TestCase(WDays.Wednesday | WDays.Thursday, "18")]
+        [TestCase(WDays.Thursday | WDays.Friday, "30")]
+        [TestCase(WDays.Friday | WDays.Saturday, "60")]
+        [TestCase(WDays.Saturday | WDays.Sunday, "41")]
+        [TestCase(WDays.None | WDays.Sunday | WDays.Monday | WDays.Tuesday | WDays.Wednesday | WDays.Thursday | WDays.Friday | WDays.Saturday, "7F")]
+        public void ToHex_WDays_Test(WDays wday, string expect) {
+            Assert.AreEqual(expect, wday.ToHex());
+        }
+
+        [TestCase(Options.NewLineCodes.Lf, "2")]
+        [TestCase(Options.NewLineCodes.Cr, "8")]
+        [TestCase(Options.NewLineCodes.CrLf, "10")]
+        [TestCase(Options.NewLineCodes.LfCr, "40")]
+        [TestCase(Options.NewLineCodes.Lf | Options.NewLineCodes.Cr, "A")]
+        [TestCase(Options.NewLineCodes.Cr | Options.NewLineCodes.CrLf, "18")]
+        [TestCase(Options.NewLineCodes.CrLf | Options.NewLineCodes.LfCr, "50")]
+        [TestCase(Options.NewLineCodes.LfCr | Options.NewLineCodes.Lf, "42")]
+        [TestCase(Options.NewLineCodes.Lf | Options.NewLineCodes.Cr | Options.NewLineCodes.CrLf | Options.NewLineCodes.LfCr, "5A")]
+        public void ToHex_NewLineCodes_Test(Options.NewLineCodes code, string expect) {
+            Assert.AreEqual(expect, code.ToHex());
         }
     }
 
@@ -127,36 +168,23 @@ namespace TakeAshUtility_Test {
         public const string EscapedProperty = "Escaped";
 
         //[TypeConverter(typeof(EnumTypeConverter<NewLineCodes>))]
-        [HexDigit(4)]
+        [Flags]
         public enum NewLineCodes {
             [EnumProperty(EntityProperty + ":'\n'")]
             [EnumProperty(EscapedProperty + ":'\\x22\\u0027\t'")]
-            Lf = 1,
+            Lf = 2,
 
             [EnumProperty(EntityProperty + " : \"\r\"" + EscapedProperty + " : '\\x0027\\x0022'")]
             [System.ComponentModel.Description("[A] Mac(CR)")]
-            Cr = 2,
+            Cr = 8,
 
             [EnumProperty(EntityProperty + ":\t'\r\n';;;")]
             [EnumProperty(EscapedProperty + ":\t\"\\x3042\"")] // U+3042 あ
             [System.ComponentModel.Description("[A] Windows(CR+LF)")]
-            CrLf = 4,
+            CrLf = 16,
 
             [EnumProperty(EntityProperty + ":\n\t'\n\r'\n" + EscapedProperty + ":\n\t'\\uD842\\uDFB7'")] // U+00020BB7 𠮷
-            LfCr = 8,
+            LfCr = 64,
         }
-    }
-
-    [AttributeUsage(AttributeTargets.Enum)]
-    public class HexDigitAttribute :
-        Attribute {
-
-        public HexDigitAttribute(int digit) {
-            Digit = digit;
-            Format = "X" + digit;
-        }
-
-        public int Digit { get; private set; }
-        public string Format { get; private set; }
     }
 }
