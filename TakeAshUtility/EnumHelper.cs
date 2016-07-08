@@ -193,7 +193,7 @@ namespace TakeAshUtility {
                 descriptionAttribute.Description;
         }
 
-        static public string GetEnumProperty<TEnum>(this TEnum en, string key)
+        public static string GetEnumProperty<TEnum>(this TEnum en, string key)
             where TEnum : struct, IConvertible {
 
             if (key == null) {
@@ -205,7 +205,7 @@ namespace TakeAshUtility {
                 enumProperty[key];
         }
 
-        static public string ToHex<TEnum>(this TEnum en)
+        public static string ToHex<TEnum>(this TEnum en)
             where TEnum : struct, IConvertible {
 
             var hexDigit = GetAttribute<TEnum, HexDigitAttribute>();
@@ -214,6 +214,25 @@ namespace TakeAshUtility {
                 hexDigit.Format;
             return Convert.ToInt32(en)
                 .ToString(format);
+        }
+
+        /// <summary>
+        /// Convert Nullable&lt;TEnum&gt; to TEnum.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
+        /// <param name="en">The nullable enum.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>The value of the en, if en has a value.</item>
+        /// <item>The default value of the TEnum, if en is null.</item>
+        /// </list>
+        /// </returns>
+        public static TEnum ToDefaultIfNull<TEnum>(this Nullable<TEnum> en)
+            where TEnum : struct, IConvertible {
+
+            return en.HasValue ?
+                en.Value :
+                default(TEnum);
         }
     }
 }
