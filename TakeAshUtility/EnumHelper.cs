@@ -216,6 +216,25 @@ namespace TakeAshUtility {
                 .ToString(format);
         }
 
+        public static string ToHexWithFlags<TEnum>(this TEnum en)
+            where TEnum : struct, IConvertible {
+
+            var flags = EnumHelper.GetValues<TEnum>()
+                .Where(flag => en.HasFlag(flag))
+                .Select(flag => flag.ToLocalizationEx());
+            return en.ToHex() + ": " + String.Join(", ", flags);
+        }
+
+        public static bool HasFlag<TEnum>(this TEnum value, TEnum flag)
+            where TEnum : struct, IConvertible {
+
+            var valueInt = Convert.ToInt32(value);
+            var flagInt = Convert.ToInt32(flag);
+            return flagInt == 0 ?
+                valueInt == 0 :
+                (valueInt & flagInt) == flagInt;
+        }
+
         /// <summary>
         /// Convert Nullable&lt;TEnum&gt; to TEnum.
         /// </summary>

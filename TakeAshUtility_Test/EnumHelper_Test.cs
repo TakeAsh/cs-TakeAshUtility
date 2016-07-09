@@ -60,7 +60,7 @@ namespace TakeAshUtility_Test {
 
         [Flags]
         [HexDigit(2)]
-        //[TypeConverter(typeof(EnumTypeConverter<WDays>))]
+        [TypeConverter(typeof(EnumTypeConverter<WDays>))]
         public enum WDays {
             None = 0x00,
             Sunday = 0x01,
@@ -88,9 +88,13 @@ namespace TakeAshUtility_Test {
         public void ToLocalizationEx_Test(int index) {
             var culture = _langs[index];
             SetCurrentCulture(culture);
-            var actual = EnumHelper.GetValues<Options.NewLineCodes>()
+            var actual1 = EnumHelper.GetValues<Options.NewLineCodes>()
                 .Select(item => item.ToLocalizationEx());
-            CollectionAssert.AreEqual(_newLineCodesLocalizations[index], actual, culture);
+            CollectionAssert.AreEqual(_newLineCodesLocalizations[index], actual1, culture);
+            var converter = TypeDescriptor.GetConverter(typeof(Options.NewLineCodes));
+            var actual2 = EnumHelper.GetValues<Options.NewLineCodes>()
+                .Select(item => converter.ConvertToString(item));
+            CollectionAssert.AreEqual(_newLineCodesLocalizations[index], actual2, culture);
         }
 
         [TestCase(0)]
@@ -128,24 +132,25 @@ namespace TakeAshUtility_Test {
             }
         }
 
-        [TestCase(WDays.None, "00")]
-        [TestCase(WDays.Sunday, "01")]
-        [TestCase(WDays.Monday, "02")]
-        [TestCase(WDays.Tuesday, "04")]
-        [TestCase(WDays.Wednesday, "08")]
-        [TestCase(WDays.Thursday, "10")]
-        [TestCase(WDays.Friday, "20")]
-        [TestCase(WDays.Saturday, "40")]
-        [TestCase(WDays.Sunday | WDays.Monday, "03")]
-        [TestCase(WDays.Monday | WDays.Tuesday, "06")]
-        [TestCase(WDays.Tuesday | WDays.Wednesday, "0C")]
-        [TestCase(WDays.Wednesday | WDays.Thursday, "18")]
-        [TestCase(WDays.Thursday | WDays.Friday, "30")]
-        [TestCase(WDays.Friday | WDays.Saturday, "60")]
-        [TestCase(WDays.Saturday | WDays.Sunday, "41")]
-        [TestCase(WDays.None | WDays.Sunday | WDays.Monday | WDays.Tuesday | WDays.Wednesday | WDays.Thursday | WDays.Friday | WDays.Saturday, "7F")]
-        public void ToHex_WDays_Test(WDays wday, string expect) {
-            Assert.AreEqual(expect, wday.ToHex());
+        [TestCase(WDays.None, "00", "00: None")]
+        [TestCase(WDays.Sunday, "01", "01: Sunday")]
+        [TestCase(WDays.Monday, "02", "02: Monday")]
+        [TestCase(WDays.Tuesday, "04", "04: Tuesday")]
+        [TestCase(WDays.Wednesday, "08", "08: Wednesday")]
+        [TestCase(WDays.Thursday, "10", "10: Thursday")]
+        [TestCase(WDays.Friday, "20", "20: Friday")]
+        [TestCase(WDays.Saturday, "40", "40: Saturday")]
+        [TestCase(WDays.Sunday | WDays.Monday, "03", "03: Sunday, Monday")]
+        [TestCase(WDays.Monday | WDays.Tuesday, "06", "06: Monday, Tuesday")]
+        [TestCase(WDays.Tuesday | WDays.Wednesday, "0C", "0C: Tuesday, Wednesday")]
+        [TestCase(WDays.Wednesday | WDays.Thursday, "18", "18: Wednesday, Thursday")]
+        [TestCase(WDays.Thursday | WDays.Friday, "30", "30: Thursday, Friday")]
+        [TestCase(WDays.Friday | WDays.Saturday, "60", "60: Friday, Saturday")]
+        [TestCase(WDays.Saturday | WDays.Sunday, "41", "41: Sunday, Saturday")]
+        [TestCase(WDays.None | WDays.Sunday | WDays.Monday | WDays.Tuesday | WDays.Wednesday | WDays.Thursday | WDays.Friday | WDays.Saturday, "7F", "7F: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday")]
+        public void ToHex_WDays_Test(WDays wday, string expectedHex, string expectedHexFlags) {
+            Assert.AreEqual(expectedHex, wday.ToHex());
+            Assert.AreEqual(expectedHexFlags, wday.ToHexWithFlags());
         }
 
         [TestCase(Options.NewLineCodes.Lf, "2")]
@@ -160,6 +165,19 @@ namespace TakeAshUtility_Test {
         public void ToHex_NewLineCodes_Test(Options.NewLineCodes code, string expect) {
             Assert.AreEqual(expect, code.ToHex());
         }
+
+        [TestCase(BkBRMGCYW.Black, "Bk", ColorGroups.Undefined)]
+        [TestCase(BkBRMGCYW.Blue, "B", ColorGroups.Primary)]
+        [TestCase(BkBRMGCYW.Red, "R", ColorGroups.Primary)]
+        [TestCase(BkBRMGCYW.Magenta, "M", ColorGroups.Secondary)]
+        [TestCase(BkBRMGCYW.Green, "G", ColorGroups.Primary)]
+        [TestCase(BkBRMGCYW.Cyan, "C", ColorGroups.Secondary)]
+        [TestCase(BkBRMGCYW.Yellow, "Y", ColorGroups.Secondary)]
+        [TestCase(BkBRMGCYW.White, "White", ColorGroups.Other)]
+        public void BkBRMGCYW_Test(BkBRMGCYW input, string expectedShortName, ColorGroups expectedGroup) {
+            Assert.AreEqual(expectedShortName, input.ToShortName());
+            Assert.AreEqual(expectedGroup, input.ToGroup());
+        }
     }
 
     public static class Options {
@@ -167,8 +185,7 @@ namespace TakeAshUtility_Test {
         public const string EntityProperty = "Entity";
         public const string EscapedProperty = "Escaped";
 
-        //[TypeConverter(typeof(EnumTypeConverter<NewLineCodes>))]
-        [Flags]
+        [TypeConverter(typeof(EnumTypeConverter<NewLineCodes>))]
         public enum NewLineCodes {
             [EnumProperty(EntityProperty + ":'\n'")]
             [EnumProperty(EscapedProperty + ":'\\x22\\u0027\t'")]
@@ -185,6 +202,53 @@ namespace TakeAshUtility_Test {
 
             [EnumProperty(EntityProperty + ":\n\t'\n\r'\n" + EscapedProperty + ":\n\t'\\uD842\\uDFB7'")] // U+00020BB7 𠮷
             LfCr = 64,
+        }
+    }
+
+    public enum BkBRMGCYW {
+        [EnumProperty(BkBRMGCYWHelper.ShortNameProperty + ":'Bk'")]
+        Black,
+        [EnumProperty(BkBRMGCYWHelper.ShortNameProperty + ":'B'")]
+        [EnumProperty(BkBRMGCYWHelper.GroupProperty + ":'Primary'")]
+        Blue,
+        [EnumProperty(BkBRMGCYWHelper.ShortNameProperty + ":'R'")]
+        [EnumProperty(BkBRMGCYWHelper.GroupProperty + ":'Primary'")]
+        Red,
+        [EnumProperty(BkBRMGCYWHelper.ShortNameProperty + ":'M'")]
+        [EnumProperty(BkBRMGCYWHelper.GroupProperty + ":'Secondary'")]
+        Magenta,
+        [EnumProperty(BkBRMGCYWHelper.ShortNameProperty + ":'G'")]
+        [EnumProperty(BkBRMGCYWHelper.GroupProperty + ":'Primary'")]
+        Green,
+        [EnumProperty(BkBRMGCYWHelper.ShortNameProperty + ":'C'")]
+        [EnumProperty(BkBRMGCYWHelper.GroupProperty + ":'Secondary'")]
+        Cyan,
+        [EnumProperty(BkBRMGCYWHelper.ShortNameProperty + ":'Y'")]
+        [EnumProperty(BkBRMGCYWHelper.GroupProperty + ":'Secondary'")]
+        Yellow,
+        [EnumProperty(BkBRMGCYWHelper.GroupProperty + ":'Other'")]
+        White,
+    }
+
+    public enum ColorGroups {
+        Undefined,
+        Primary,
+        Secondary,
+        Other,
+    }
+
+    public static class BkBRMGCYWHelper {
+
+        public const string ShortNameProperty = "ShortName";
+        public const string GroupProperty = "Group";
+
+        public static string ToShortName(this BkBRMGCYW en) {
+            return en.GetEnumProperty(ShortNameProperty) ?? en.ToString();
+        }
+
+        public static ColorGroups ToGroup(this BkBRMGCYW en) {
+            return en.GetEnumProperty(GroupProperty)
+                .TryParse<ColorGroups>();
         }
     }
 }
