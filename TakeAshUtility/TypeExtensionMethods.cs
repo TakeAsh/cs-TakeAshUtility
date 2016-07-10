@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace TakeAshUtility {
@@ -10,6 +11,8 @@ namespace TakeAshUtility {
     public static class TypeExtensionMethods {
 
         private static readonly BindingFlags _flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        private static readonly BindingFlags _extensionMethodFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+        private static List<MethodInfo> _allExtensionMethods;
 
         public static TAttr[] GetAttributes<TAttr>(this Type type, string propertyName)
             where TAttr : Attribute {
@@ -97,6 +100,28 @@ namespace TakeAshUtility {
             return type == null || !type.IsValueType ?
                 null :
                 Activator.CreateInstance(type);
+        }
+
+        public static MethodInfo GetExtensionMethod(this Type t, string methodName) {
+            if (_allExtensionMethods == null) {
+                _allExtensionMethods = AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .Aggregate(
+                        new List<MethodInfo>(),
+                        (current, assembly) => {
+                            assembly.GetTypes()
+                                .Where(type => type.IsSealed && !type.IsGenericType && !type.IsNested)
+                                .ForEach(type => {
+                                    var extensionMethods = type.GetMethods(_extensionMethodFlags)
+                                        .Where(method => method.IsDefined(typeof(ExtensionAttribute), false));
+                                    current.AddRange(extensionMethods);
+                                });
+                            return current;
+                        }
+                    );
+            }
+            return _allExtensionMethods.Where(method => method.GetParameters().First().ParameterType.IsAssignableFrom(t))
+                .FirstOrDefault(method => method.Name == methodName);
         }
     }
 }
