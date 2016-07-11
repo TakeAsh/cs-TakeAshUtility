@@ -99,6 +99,9 @@ namespace TakeAshUtility_Test {
         [TestCase(typeof(BkBRMGCYW), "ToGroup", true)]
         [TestCase(typeof(BkBRMGCYW), "NotExist", false)]
         [TestCase(typeof(Enum), "ToLocalizationEx", true)]
+        [TestCase(typeof(WDays), "ToLocalizationEx", true)]
+        [TestCase(typeof(WDays), "ToHexWithFlags", true)]
+        [TestCase(typeof(WDays), "ToHexWithFlag", false)]
         public void GetExtensionMethod_Test(Type type, string name, bool exist) {
             var actual = type.GetExtensionMethod(name);
             if (exist) {
