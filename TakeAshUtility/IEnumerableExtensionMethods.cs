@@ -337,5 +337,27 @@ namespace TakeAshUtility {
                 0 :
                 source.Count();
         }
+
+        /// <summary>
+        /// Concatenates the members of a collection, using the specified separator between each member.
+        /// </summary>
+        /// <typeparam name="T">The type of the members of source.</typeparam>
+        /// <param name="source">A collection that contains the objects to concatenate.</param>
+        /// <param name="separator">The string to use as a separator.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>A string that consists of the members of source delimited by the separator string.</item>
+        /// <item>If source has no members, the method returns null.</item>
+        /// </list>
+        /// </returns>
+        /// <remarks>
+        /// [c# - An analog of String.Join(string, string[]) for IEnumerable&lt;T&gt; - Stack Overflow](http://stackoverflow.com/questions/993534/)
+        /// </remarks>
+        public static string SafeJoin<T>(this IEnumerable<T> source, string separator) {
+            if (source.SafeCount() == 0) {
+                return null;
+            }
+            return String.Join(separator, source);
+        }
     }
 }
