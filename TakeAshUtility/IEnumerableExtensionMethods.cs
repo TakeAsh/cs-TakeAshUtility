@@ -353,7 +353,7 @@ namespace TakeAshUtility {
         /// <remarks>
         /// [c# - An analog of String.Join(string, string[]) for IEnumerable&lt;T&gt; - Stack Overflow](http://stackoverflow.com/questions/993534/)
         /// </remarks>
-        public static string SafeJoin<T>(this IEnumerable<T> source, string separator) {
+        public static string JoinToString<T>(this IEnumerable<T> source, string separator) {
             if (source.SafeCount() == 0) {
                 return null;
             }
