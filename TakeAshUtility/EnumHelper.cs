@@ -240,18 +240,19 @@ namespace TakeAshUtility {
         /// </summary>
         /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="en">The nullable enum.</param>
+        /// <param name="defaultValue">The value to be used when en is null.</param>
         /// <returns>
         /// <list type="bullet">
         /// <item>The value of the en, if en has a value.</item>
-        /// <item>The default value of the TEnum, if en is null.</item>
+        /// <item>The defaultValue, if en is null.</item>
         /// </list>
         /// </returns>
-        public static TEnum ToDefaultIfNull<TEnum>(this Nullable<TEnum> en)
+        public static TEnum ToDefaultIfNull<TEnum>(this Nullable<TEnum> en, TEnum defaultValue = default(TEnum))
             where TEnum : struct, IConvertible {
 
             return en.HasValue ?
                 en.Value :
-                default(TEnum);
+                defaultValue;
         }
     }
 }
