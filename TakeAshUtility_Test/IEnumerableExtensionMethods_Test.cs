@@ -163,5 +163,26 @@ namespace TakeAshUtility_Test {
                 .ToArray();
             CollectionAssert.AreEqual(expectedSequence, work);
         }
+
+        [TestCase(null, null, null)]
+        [TestCase("[[BLANK]]", null, null)]
+        [TestCase("", null, "")]
+        [TestCase("", "-", "")]
+        [TestCase("abc", null, "abc")]
+        [TestCase("abc", "-", "abc")]
+        [TestCase("abc//def//ghi", null, "abcdefghi")]
+        [TestCase("abc//def//ghi", "", "abcdefghi")]
+        [TestCase("abc//def//ghi", "-", "abc-def-ghi")]
+        [TestCase("abc//def//ghi", "++", "abc++def++ghi")]
+        public void JoinToString_Test(string input, string separator, string expected) {
+            var actual = input == null ? (null as string[]).JoinToString(separator) :
+                input == "[[BLANK]]" ? new string[0].JoinToString(separator) :
+                input.Split(new[] { "//" }, StringSplitOptions.None).JoinToString(separator);
+            if (expected != null) {
+                Assert.AreEqual(expected, actual);
+            } else {
+                Assert.Null(actual);
+            }
+        }
     }
 }
