@@ -250,9 +250,27 @@ namespace TakeAshUtility {
         public static TEnum ToDefaultIfNull<TEnum>(this Nullable<TEnum> en, TEnum defaultValue = default(TEnum))
             where TEnum : struct, IConvertible {
 
-            return en.HasValue ?
-                en.Value :
-                defaultValue;
+            return en ?? defaultValue;
+        }
+
+        public static Nullable<TEnum> ToEnumFromLocalization<TEnum>(this string localization)
+            where TEnum : struct, IConvertible {
+
+            if (localization == null) {
+                return null;
+            }
+            foreach (var value in GetValues<TEnum>()) {
+                if (value.ToLocalizationEx() == localization) {
+                    return value;
+                }
+            }
+            return null;
+        }
+
+        public static TEnum ToEnumFromLocalization<TEnum>(this string localization, TEnum defaultValue)
+            where TEnum : struct, IConvertible {
+
+            return localization.ToEnumFromLocalization<TEnum>() ?? defaultValue;
         }
     }
 }
