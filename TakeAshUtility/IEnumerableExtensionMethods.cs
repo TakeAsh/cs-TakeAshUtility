@@ -359,5 +359,19 @@ namespace TakeAshUtility {
             }
             return String.Join(separator, source);
         }
+
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) {
+            if (source.SafeCount() == 0) {
+                return null;
+            }
+            return new HashSet<T>(source);
+        }
+
+        public static SortedSet<T> ToSortedSet<T>(this IEnumerable<T> source) {
+            if (source.SafeCount() == 0) {
+                return null;
+            }
+            return new SortedSet<T>(source);
+        }
     }
 }
