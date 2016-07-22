@@ -92,6 +92,7 @@
     <Compile Include="IEquatableExtensionMethods.cs" />
     <Compile Include="InlineComparer.cs" />
     <Compile Include="INotifyPropertyChangedExtensionMethods.cs" />
+    <Compile Include="MarshalHelper.cs" />
     <Compile Include="ListExtensionMethods.cs" />
     <Compile Include="IEnumerableStringConverter.cs" />
     <Compile Include="ObjectExtensionMethods.cs" />
