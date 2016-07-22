@@ -39,8 +39,8 @@ namespace TakeAshUtility {
             // コンバーターを作成
             var converter = TypeDescriptor.GetConverter(typeof(T));
 
-            // 変換不可能な場合は規定値を返す
-            if (!converter.CanConvertFrom(typeof(string))) {
+            // text が null 、または変換不可能な場合は規定値を返す
+            if (text == null || !converter.CanConvertFrom(typeof(string))) {
                 return defaultValue;
             }
 
