@@ -29,7 +29,7 @@ namespace TakeAshUtility {
     /// 
     ///     public string Name {
     ///         get { return _name; }
-    ///         set { IsDirty |= this.SetFieldAndNotify(ref _name, value, "Name"); } // Notify if changed
+    ///         set { IsDirty |= this.SetField(ref _name, value, "Name"); } // Notify if changed
     ///     }
     /// 
     /// #pragma warning disable 0067
