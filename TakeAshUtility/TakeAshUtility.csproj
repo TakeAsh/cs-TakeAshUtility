@@ -88,6 +88,7 @@
     <Compile Include="ICollectionExtensionMethods.cs" />
     <Compile Include="IComparableExtensionMethods.cs" />
     <Compile Include="IDictionaryExtensionMethods.cs" />
+    <Compile Include="IDisposableHelper.cs" />
     <Compile Include="IEnumerableExtensionMethods.cs" />
     <Compile Include="IEquatableExtensionMethods.cs" />
     <Compile Include="InlineComparer.cs" />
