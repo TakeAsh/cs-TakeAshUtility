@@ -19,7 +19,7 @@ namespace TakeAshUtility {
             disposable.Dispose();
         }
 
-        public static void SafeDispose<T>(this IEnumerable<T> disposables, Action<T> predispose = null)
+        public static void SafeDisposeAll<T>(this IEnumerable<T> disposables, Action<T> predispose = null)
             where T : IDisposable {
 
             if (disposables.SafeCount() == 0) {
