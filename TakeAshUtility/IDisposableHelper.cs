@@ -7,9 +7,14 @@ namespace TakeAshUtility {
 
     public static class IDisposableHelper {
 
-        public static void SafeDispose(this IDisposable disposable) {
+        public static void SafeDispose<T>(this T disposable, Action<T> predispose = null)
+            where T : IDisposable {
+
             if (disposable == null) {
                 return;
+            }
+            if (predispose != null) {
+                predispose(disposable);
             }
             disposable.Dispose();
         }
