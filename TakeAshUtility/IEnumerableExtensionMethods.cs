@@ -318,6 +318,24 @@ namespace TakeAshUtility {
             }
         }
 
+        /// <summary>
+        /// ForEach for IEnumerable&lt;T&gt; with index and total
+        /// </summary>
+        /// <typeparam name="T">Source type</typeparam>
+        /// <param name="enumeration">Source</param>
+        /// <param name="action">Action to be applied for each source items</param>
+        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T, int, int> action) {
+            if(enumeration == null || action == null) {
+                return;
+            }
+            var index = 0;
+            var total = enumeration.Count();
+            foreach(T item in enumeration) {
+                action(item, index, total);
+                ++index;
+            }
+        }
+
         public static T[] SafeToArray<T>(this IEnumerable<T> source) {
             T[] array;
             return source == null || (array = source.ToArray()).Length == 0 ?
