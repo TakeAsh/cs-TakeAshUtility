@@ -50,15 +50,15 @@ namespace TakeAshUtility {
             if (sender == null || String.IsNullOrEmpty(propertyName)) {
                 return;
             }
-            var handler = sender.GetDelegate(EventHandlerName)
-                .GetHandler<PropertyChangedWithValueEventHandler>();
-            if (handler == null) {
+            var handlers = sender.GetDelegate(EventHandlerName)
+                .GetHandlers<PropertyChangedWithValueEventHandler>();
+            if (handlers == null) {
                 return;
             }
-            handler(
+            handlers.ForEach(hander => hander(
                 sender,
                 new PropertyChangedWithValueEventArgs(propertyName, newValue, oldValue)
-            );
+            ));
         }
 
         public static void SetPropertyAndNotifyIfChanged<TValue>(

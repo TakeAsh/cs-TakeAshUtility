@@ -58,13 +58,13 @@ namespace TakeAshUtility {
             if (propertyNames == null) {
                 return;
             }
-            var handler = sender.GetDelegate(PropertyChangedHandlerName)
-                .GetHandler<PropertyChangedEventHandler>();
-            if (handler == null) {
+            var handlers = sender.GetDelegate(PropertyChangedHandlerName)
+                .GetHandlers<PropertyChangedEventHandler>();
+            if (handlers == null) {
                 return;
             }
             propertyNames.Where(name => !String.IsNullOrEmpty(name))
-                .ForEach(name => handler(sender, new PropertyChangedEventArgs(name)));
+                .ForEach(name => handlers.ForEach(hander => hander(sender, new PropertyChangedEventArgs(name))));
         }
 
         public static bool SetField<T>(

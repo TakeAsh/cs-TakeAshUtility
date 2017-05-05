@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 
 namespace TakeAshUtility {
-    
+
     public static class EventHandlerExtensionMethods {
 
         public static Delegate GetDelegate(this Object obj, string eventHandlerName) {
@@ -18,15 +18,14 @@ namespace TakeAshUtility {
                     field.GetValue(obj) as Delegate;
         }
 
-        public static T GetHandler<T>(this Delegate delgate)
+        public static IEnumerable<T> GetHandlers<T>(this Delegate delgate)
             where T : class {
 
             return delgate == null ?
                 null :
                 delgate.GetInvocationList()
                     .Select(del => del as T)
-                    .Where(handler => handler != null)
-                    .FirstOrDefault();
+                    .Where(handler => handler != null);
         }
     }
 }
