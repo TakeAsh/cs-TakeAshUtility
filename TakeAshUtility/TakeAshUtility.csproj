@@ -122,6 +122,7 @@
     <Compile Include="PropertyChangedWithValueEvent.cs" />
     <Compile Include="ResourceHelper.cs" />
     <Compile Include="SafeWalk.cs" />
+    <Compile Include="ThreadExecutionState.cs" />
     <Compile Include="StringExtensionMethods.cs" />
     <Compile Include="StringifyHelper.cs" />
     <Compile Include="IItems.cs" />
