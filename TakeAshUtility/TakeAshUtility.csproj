@@ -117,6 +117,7 @@
     <Compile Include="MarshalHelper.cs" />
     <Compile Include="ListExtensionMethods.cs" />
     <Compile Include="IEnumerableStringConverter.cs" />
+    <Compile Include="MIME.cs" />
     <Compile Include="ObjectExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyChangedWithValueEvent.cs" />
