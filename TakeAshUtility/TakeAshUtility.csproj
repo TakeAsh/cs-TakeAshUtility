@@ -97,6 +97,7 @@
     <Compile Include="ConsoleEx.cs" />
     <Compile Include="CRC32.cs" />
     <Compile Include="Crypt.cs" />
+    <Compile Include="DelegateHelper.cs" />
     <Compile Include="EndPointExtensionMethods.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="EnumPropertyAttribute.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="ListExtensionMethods.cs" />
     <Compile Include="IEnumerableStringConverter.cs" />
     <Compile Include="MIME.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="ObjectExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyChangedWithValueEvent.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="ToStringHelper.cs" />
     <Compile Include="TraceSourceExtensionMethods.cs" />
     <Compile Include="TypeExtensionMethods.cs" />
+    <Compile Include="UnManagedDll.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

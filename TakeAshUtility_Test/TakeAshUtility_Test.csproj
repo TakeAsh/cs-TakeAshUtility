@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="StringExtensionMethods_Test.cs" />
     <Compile Include="TypeExtensionMethods_Test.cs" />
+    <Compile Include="UnManagedDll_Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TakeAshUtility\TakeAshUtility.csproj">
