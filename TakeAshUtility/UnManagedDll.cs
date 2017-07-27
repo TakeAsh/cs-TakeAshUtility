@@ -77,6 +77,38 @@ namespace TakeAshUtility {
             return (T1 x1, T2 x2, T3 x3, T4 x4) => (TResult)nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4 });
         }
 
+        public Func<T1, T2, T3, T4, T5, TResult> GetFunc<T1, T2, T3, T4, T5, TResult>(string method) {
+            this.ThrowExceptionIfDisposed();
+            var delegateType = DelegateHelper.NewDelegateType(typeof(TResult), new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) });
+            var nonGenericDelegate = ModuleHandle.ToProcAddress(method).ToDelegate(delegateType);
+            if(nonGenericDelegate == null) { return null; }
+            return (T1 x1, T2 x2, T3 x3, T4 x4, T5 x5) => (TResult)nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4, x5 });
+        }
+
+        public Func<T1, T2, T3, T4, T5, T6, TResult> GetFunc<T1, T2, T3, T4, T5, T6, TResult>(string method) {
+            this.ThrowExceptionIfDisposed();
+            var delegateType = DelegateHelper.NewDelegateType(typeof(TResult), new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6) });
+            var nonGenericDelegate = ModuleHandle.ToProcAddress(method).ToDelegate(delegateType);
+            if(nonGenericDelegate == null) { return null; }
+            return (T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6) => (TResult)nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4, x5, x6 });
+        }
+
+        public Func<T1, T2, T3, T4, T5, T6, T7, TResult> GetFunc<T1, T2, T3, T4, T5, T6, T7, TResult>(string method) {
+            this.ThrowExceptionIfDisposed();
+            var delegateType = DelegateHelper.NewDelegateType(typeof(TResult), new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7) });
+            var nonGenericDelegate = ModuleHandle.ToProcAddress(method).ToDelegate(delegateType);
+            if(nonGenericDelegate == null) { return null; }
+            return (T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7) => (TResult)nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4, x5, x6, x7 });
+        }
+
+        public Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> GetFunc<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(string method) {
+            this.ThrowExceptionIfDisposed();
+            var delegateType = DelegateHelper.NewDelegateType(typeof(TResult), new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7), typeof(T8) });
+            var nonGenericDelegate = ModuleHandle.ToProcAddress(method).ToDelegate(delegateType);
+            if(nonGenericDelegate == null) { return null; }
+            return (T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7, T8 x8) => (TResult)nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4, x5, x6, x7, x8 });
+        }
+
         public Action GetAction(string method) {
             this.ThrowExceptionIfDisposed();
             var delegateType = DelegateHelper.NewDelegateType(typeof(void));
@@ -115,6 +147,38 @@ namespace TakeAshUtility {
             var nonGenericDelegate = ModuleHandle.ToProcAddress(method).ToDelegate(delegateType);
             if(nonGenericDelegate == null) { return null; }
             return (T1 x1, T2 x2, T3 x3, T4 x4) => nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4 });
+        }
+
+        public Action<T1, T2, T3, T4, T5> GetAction<T1, T2, T3, T4, T5>(string method) {
+            this.ThrowExceptionIfDisposed();
+            var delegateType = DelegateHelper.NewDelegateType(typeof(void), new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) });
+            var nonGenericDelegate = ModuleHandle.ToProcAddress(method).ToDelegate(delegateType);
+            if(nonGenericDelegate == null) { return null; }
+            return (T1 x1, T2 x2, T3 x3, T4 x4, T5 x5) => nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4, x5 });
+        }
+
+        public Action<T1, T2, T3, T4, T5, T6> GetAction<T1, T2, T3, T4, T5, T6>(string method) {
+            this.ThrowExceptionIfDisposed();
+            var delegateType = DelegateHelper.NewDelegateType(typeof(void), new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6) });
+            var nonGenericDelegate = ModuleHandle.ToProcAddress(method).ToDelegate(delegateType);
+            if(nonGenericDelegate == null) { return null; }
+            return (T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6) => nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4, x5, x6 });
+        }
+
+        public Action<T1, T2, T3, T4, T5, T6, T7> GetAction<T1, T2, T3, T4, T5, T6, T7>(string method) {
+            this.ThrowExceptionIfDisposed();
+            var delegateType = DelegateHelper.NewDelegateType(typeof(void), new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7) });
+            var nonGenericDelegate = ModuleHandle.ToProcAddress(method).ToDelegate(delegateType);
+            if(nonGenericDelegate == null) { return null; }
+            return (T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7) => nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4, x5, x6, x7 });
+        }
+
+        public Action<T1, T2, T3, T4, T5, T6, T7, T8> GetAction<T1, T2, T3, T4, T5, T6, T7, T8>(string method) {
+            this.ThrowExceptionIfDisposed();
+            var delegateType = DelegateHelper.NewDelegateType(typeof(void), new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7), typeof(T8) });
+            var nonGenericDelegate = ModuleHandle.ToProcAddress(method).ToDelegate(delegateType);
+            if(nonGenericDelegate == null) { return null; }
+            return (T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7, T8 x8) => nonGenericDelegate.DynamicInvoke(new object[] { x1, x2, x3, x4, x5, x6, x7, x8 });
         }
 
         #region Dispose Finalize パターン
