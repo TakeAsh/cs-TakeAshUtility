@@ -64,6 +64,30 @@ namespace TakeAshUtility {
                 fnc(x1, x2, x3, x4);
         }
 
+        public static TResult SafeInvoke<T1, T2, T3, T4, T5, TResult>(this Func<T1, T2, T3, T4, T5, TResult> fnc, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5) {
+            return fnc == null ?
+                default(TResult) :
+                fnc(x1, x2, x3, x4, x5);
+        }
+
+        public static TResult SafeInvoke<T1, T2, T3, T4, T5, T6, TResult>(this Func<T1, T2, T3, T4, T5, T6, TResult> fnc, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6) {
+            return fnc == null ?
+                default(TResult) :
+                fnc(x1, x2, x3, x4, x5, x6);
+        }
+
+        public static TResult SafeInvoke<T1, T2, T3, T4, T5, T6, T7, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, TResult> fnc, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7) {
+            return fnc == null ?
+                default(TResult) :
+                fnc(x1, x2, x3, x4, x5, x6, x7);
+        }
+
+        public static TResult SafeInvoke<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> fnc, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7, T8 x8) {
+            return fnc == null ?
+                default(TResult) :
+                fnc(x1, x2, x3, x4, x5, x6, x7, x8);
+        }
+
         public static void SafeInvoke(this Action act) {
             if(act == null) {
                 return;
@@ -97,6 +121,34 @@ namespace TakeAshUtility {
                 return;
             }
             act(x1, x2, x3, x4);
+        }
+
+        public static void SafeInvoke<T1, T2, T3, T4, T5>(this Action<T1, T2, T3, T4, T5> act, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5) {
+            if(act == null) {
+                return;
+            }
+            act(x1, x2, x3, x4, x5);
+        }
+
+        public static void SafeInvoke<T1, T2, T3, T4, T5, T6>(this Action<T1, T2, T3, T4, T5, T6> act, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6) {
+            if(act == null) {
+                return;
+            }
+            act(x1, x2, x3, x4, x5, x6);
+        }
+
+        public static void SafeInvoke<T1, T2, T3, T4, T5, T6, T7>(this Action<T1, T2, T3, T4, T5, T6, T7> act, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7) {
+            if(act == null) {
+                return;
+            }
+            act(x1, x2, x3, x4, x5, x6, x7);
+        }
+
+        public static void SafeInvoke<T1, T2, T3, T4, T5, T6, T7, T8>(this Action<T1, T2, T3, T4, T5, T6, T7, T8> act, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7, T8 x8) {
+            if(act == null) {
+                return;
+            }
+            act(x1, x2, x3, x4, x5, x6, x7, x8);
         }
     }
 }
