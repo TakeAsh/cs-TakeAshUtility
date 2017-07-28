@@ -95,6 +95,19 @@ namespace TakeAshUtility {
         /// <summary>
         /// Converts an unmanaged function pointer to a delegate.
         /// </summary>
+        /// <typeparam name="T">The type of the delegate.</typeparam>
+        /// <param name="hMethod">The unmanaged function pointer to be converted.</param>
+        /// <returns>A delegate instance that is casted to the specified delegate type.</returns>
+        public static T ToDelegate<T>(this IntPtr hMethod)
+            where T : class { // T : Delegate
+            return hMethod == IntPtr.Zero || !typeof(T).IsSubclassOf(typeof(Delegate)) ?
+                null :
+                Marshal.GetDelegateForFunctionPointer(hMethod, typeof(T)) as T;
+        }
+
+        /// <summary>
+        /// Converts an unmanaged function pointer to a delegate.
+        /// </summary>
         /// <param name="hMethod">The unmanaged function pointer to be converted.</param>
         /// <param name="delegateType">The type of the delegate to be returned.</param>
         /// <returns>A delegate instance that can be cast to the appropriate delegate type.</returns>

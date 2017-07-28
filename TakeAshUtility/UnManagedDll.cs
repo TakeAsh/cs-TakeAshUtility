@@ -30,11 +30,10 @@ namespace TakeAshUtility {
             get { return ModuleHandle != IntPtr.Zero; }
         }
 
-        public T GetProcDelegate<T>(string method)
+        public T GetProcDelegate<T>(string method = null)
             where T : class { // T : Delegate
             this.ThrowExceptionIfDisposed();
-            var methodHandle = ModuleHandle.ToProcAddress(method);
-            return Marshal.GetDelegateForFunctionPointer(methodHandle, typeof(T)) as T;
+            return ModuleHandle.ToProcAddress(method ?? typeof(T).Name).ToDelegate<T>();
         }
 
         public Func<TResult> GetFunc<TResult>(string method) {
