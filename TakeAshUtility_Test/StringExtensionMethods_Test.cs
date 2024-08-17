@@ -361,5 +361,41 @@ namespace TakeAshUtility_Test {
             var actual = Encoding.UTF8.GetString(input.ToBytesAsAscii85Encoding());
             Assert.AreEqual(expected, actual);
         }
+
+        [TestCase(null, null)]
+        [TestCase("", "")]
+        [TestCase("　！\uff02＃＄％＆\uff07（）＊＋，－．／：；＜＝＞？＠［＼］＾＿\uff40", " !\"#$%&'()*+,-./:;<=>?@[\\]^_`")]
+        [TestCase("０１２３４５６７８９", "0123456789")]
+        [TestCase("ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+        [TestCase("ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ", "abcdefghijklmnopqrstuvwxyz")]
+        [TestCase("！！！０００ＡＡＡａａａ　　　", "!!!000AAAaaa   ")]
+        [TestCase("\u201c\u201d\u201e\u201f\u2e42\u275d\u275e\u301d\u301e\u301f", "\"\"\"\"\"\"\"\"\"\"")]
+        [TestCase("\u2018\u2019\u201a\u201b\u275b\u275c", "''''''")]
+        [TestCase("あいう　！０Ａａわをん", "あいう !0Aaわをん")]
+        public void Latin1_ZenToHan_Test(string input, string expected) {
+            var actual = input.Latin1_ZenToHan();
+            if (expected != null) {
+                Assert.AreEqual(expected, actual);
+            } else {
+                Assert.Null(actual);
+            }
+        }
+
+        [TestCase(null, null)]
+        [TestCase("", "")]
+        [TestCase(" !\"#$%&'()*+,-./:;<=>?@[\\]^_`", "　！\uff02＃＄％＆\uff07（）＊＋，－．／：；＜＝＞？＠［＼］＾＿\uff40")]
+        [TestCase("0123456789", "０１２３４５６７８９")]
+        [TestCase("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ")]
+        [TestCase("abcdefghijklmnopqrstuvwxyz", "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ")]
+        [TestCase("!!!000AAAaaa   ", "！！！０００ＡＡＡａａａ　　　")]
+        [TestCase("あいう !0Aaわをん", "あいう　！０Ａａわをん")]
+        public void Latin1_HanToZen_Test(string input, string expected) {
+            var actual = input.Latin1_HanToZen();
+            if (expected != null) {
+                Assert.AreEqual(expected, actual);
+            } else {
+                Assert.Null(actual);
+            }
+        }
     }
 }

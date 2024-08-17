@@ -47,8 +47,7 @@ namespace TakeAshUtility {
             try {
                 // 変換した値を返す
                 return (T)converter.ConvertFrom(text);
-            }
-            catch {
+            } catch {
                 // 変換に失敗したら規定値を返す
                 return defaultValue;
             }
@@ -110,6 +109,23 @@ namespace TakeAshUtility {
             return text.Substring(text.Length - length);
         }
 
+        /// <summary>
+        /// In a specified input string, replaces all strings that match a specified regular expression with a string returned by a MatchEvaluator delegate.
+        /// </summary>
+        /// <param name="source">The string to search for a match.</param>
+        /// <param name="regex">The regular expression pattern to search.</param>
+        /// <param name="me">A custom method that examines each match and returns either the original matched string or a replacement string.</param>
+        /// <returns>
+        /// A new string that is identical to the input string, except that a replacement string takes the place of each matched string.
+        /// If the regular expression pattern is not matched in the current instance, the method returns the current instance unchanged.
+        /// </returns>
+        public static string Replace(this string source, Regex regex, MatchEvaluator me) {
+            if (String.IsNullOrEmpty(source)) {
+                return source;
+            }
+            return regex.Replace(source, me);
+        }
+
         private static readonly Regex _regQuotemeta = new Regex(@"([^0-9A-Za-z_])");
 
         /// <summary>
@@ -124,13 +140,7 @@ namespace TakeAshUtility {
         /// </list>
         /// </remarks>
         public static string Quotemeta(this string source) {
-            if (String.IsNullOrEmpty(source)) {
-                return source;
-            }
-            return _regQuotemeta.Replace(
-                source,
-                (Match m) => "\\u" + String.Format("{0:x4}", (int)(m.Value[0]))
-            );
+            return source.Replace(_regQuotemeta, (m) => "\\u" + String.Format("{0:x4}", (int)(m.Value[0])));
         }
 
         /// <summary>
@@ -230,6 +240,40 @@ namespace TakeAshUtility {
             return padded == 0 ?
                 bytes.ToArray() :
                 bytes.Take(bytes.Count - padded).ToArray();
+        }
+
+        private static readonly Regex _regLatin1_ZenToHan = new Regex(@"([\uff01-\uff5e])");
+        private static readonly Regex _regQuotation_ZenToHan = new Regex(@"([\u201c\u201d\u201e\u201f\u2e42\u275d\u275e\u301d\u301e\u301f])");
+        private static readonly Regex _regApostrophe_ZenToHan = new Regex(@"([\u2018\u2019\u201a\u201b\u275b\u275c])");
+
+        /// <summary>
+        /// Convert Latin1(alphabet, numbers and symbols) ZENKAKU to HANKAKU.
+        /// </summary>
+        /// <param name="source">The string to convert.</param>
+        /// <returns>The string to be converted into HANKAKU.</returns>
+        public static string Latin1_ZenToHan(this string source) {
+            if (String.IsNullOrEmpty(source)) {
+                return source;
+            }
+            return source.Replace('\u3000', '\u0020')
+                .Replace(_regLatin1_ZenToHan, (m) => ((char)(m.Value[0] - '！' + '!')).ToString())
+                .Replace(_regQuotation_ZenToHan, (m) => "\"")
+                .Replace(_regApostrophe_ZenToHan, (m) => "'");
+        }
+
+        private static readonly Regex _regLatin1_HanToZen = new Regex(@"([\u0021-\u007e])");
+
+        /// <summary>
+        /// Convert Latin1(alphabet, numbers and symbols) HANKAKU to ZENKAKU.
+        /// </summary>
+        /// <param name="source">The string to convert.</param>
+        /// <returns>The string to be converted into ZENKAKU.</returns>
+        public static string Latin1_HanToZen(this string source) {
+            if (String.IsNullOrEmpty(source)) {
+                return source;
+            }
+            return source.Replace('\u0020', '\u3000')
+                .Replace(_regLatin1_HanToZen, (m) => ((char)(m.Value[0] - '!' + '！')).ToString());
         }
     }
 }
