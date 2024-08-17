@@ -20,7 +20,7 @@ namespace TakeAshUtility_Test {
         [TestCase("text/html", ".htm")]
         [TestCase("text/css", ".css")]
         //[TestCase("application/javascript", ".js")]
-        [TestCase("image/jpeg", ".jpg")]
+        [TestCase("image/jpeg", ".jfif")]
         [TestCase("image/png", ".png")]
         [TestCase("video/mp4", ".mp4")]
         [TestCase("application/x-zip-compressed", ".zip")]
